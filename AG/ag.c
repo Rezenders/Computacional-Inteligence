@@ -6,7 +6,8 @@
 void sort(int array[]);
 int getAv(int array[]);
 void getMinMaxAv();
-void selectParents(int p_index[]);
+void tour(int parents[][11], int p_index[], int tour_size);
+void crossOver(int p_index[]);
 
 int main() {
   // sendmory
@@ -39,10 +40,10 @@ int main() {
   printf("Av min: %i  Av min index: %i\n", av_min, av_mini);
   printf("Av max: %i  Av max index: %i\n", av_max, av_maxi);
 
-  selectParents(p_index);
+  tour(p, p_index, 3);
 }
 
-void sort(int array[]){
+void sort(int array[]) {
   for (int i = 9; i > 0; --i) {
     // index
     int w = rand() % i;
@@ -62,10 +63,25 @@ int getAv(int array[]) {
   return abs(aux);
 }
 
-void selectParents(int p_index[]){
+void tour(int parents[][11], int p_index[], int tour_size) {
   printf("INDEXS \n");
-  for(int n =0; n <80; n++){
-    p_index[n] = rand()%80;
-    printf("%i \n", p_index[n]);
+
+  for (int i = 0; i < 80; i++) {
+    int best_av = 0;
+    int best_index = -1;
+
+    for (int n = 0; n < 2 * tour_size; n += 2) {
+      int aux_i = rand() % 100;
+      int aux_av = parents[aux_i][10];
+
+      if (aux_av > best_av) {
+        best_av = aux_av;
+        best_index = aux_i;
+      }
+
+      p_index[i] = best_index;
+    }
+
+    printf("%i \n", p_index[i]);
   }
 }
