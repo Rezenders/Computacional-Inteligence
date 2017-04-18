@@ -1,2 +1,2 @@
 all:
-	gcc ag.c -o ag
+	gcc -g ag.c -o ag
