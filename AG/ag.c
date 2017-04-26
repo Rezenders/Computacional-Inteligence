@@ -22,20 +22,20 @@ int main() {
   // sendmory
   srand((unsigned)666);
 
-  //PARAMETROS DO AG
+  // PARAMETROS DO AG
   static int pop_size = 100;
   static int n_sons = 80;
   static int n_ger = 200;
   static int mutate_percent = 10;
 
-  //PAIS E FILHOS
+  // PAIS E FILHOS
   int p[pop_size][11];
   int p_index[n_sons];
   int sons[n_sons][11];
 
-  //Numero de execuções
+  // Numero de execuções
   int n_execucao = 1000;
-  int n_zero =0;
+  int n_zero = 0;
 
   for (int ag_n = 0; ag_n < n_execucao; ag_n++) {
     av_min = 10000000, av_max = 0;
@@ -51,13 +51,12 @@ int main() {
     }
     printf("\n Melhor avalição na execução %i foi: %i", ag_n, av_min);
 
-    if(av_min==0){
+    if (av_min == 0) {
       n_zero++;
     }
-
   }
 
-  printf("\nPorcentagem de sucesso %lf\n",(double)n_zero/n_execucao);
+  printf("\nPorcentagem de sucesso %lf\n", (double)n_zero / n_execucao);
 }
 
 void generatePop(int pop[][11], int pop_size) {
@@ -120,7 +119,7 @@ void tour(int parents[][11], int p_index[], int tour_size, int n_sons) {
     int best_av = 1000000000;
     int best_index = -1;
 
-    for (int n = 0; n <  tour_size; n++) {
+    for (int n = 0; n < tour_size; n++) {
       int aux_i = rand() % 100;
       int aux_av = parents[aux_i][10];
 
@@ -137,7 +136,8 @@ void tour(int parents[][11], int p_index[], int tour_size, int n_sons) {
 void crossOverAll(int parents[][11], int p_index[], int sons[][11], int n_sons,
                   int mutate_percent) {
   for (size_t i = 0; i < n_sons; i += 2) {
-    crossOver(parents[p_index[i]], parents[p_index[i + 1]], sons[i], sons[i + 1], mutate_percent);
+    crossOver(parents[p_index[i]], parents[p_index[i + 1]], sons[i],
+              sons[i + 1], mutate_percent);
   }
 }
 
@@ -185,11 +185,10 @@ void mutation(int array[]) {
 void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons) {
   int parents_sons[p_size + n_sons][11];
 
-  memcpy(parents_sons[0], parents, sizeof(int)*p_size*11);
-  memcpy(parents_sons[p_size], sons, sizeof(int)*n_sons*11);
+  memcpy(parents_sons[0], parents, sizeof(int) * p_size * 11);
+  memcpy(parents_sons[p_size], sons, sizeof(int) * n_sons * 11);
 
   sortOrderAv(parents_sons, p_size + n_sons);
 
   memcpy(parents, parents_sons, p_size);
-
 }
