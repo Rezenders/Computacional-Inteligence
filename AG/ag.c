@@ -4,10 +4,10 @@
 #include <string.h>
 
 void generatePop(int pop[][11], int pop_size);
+void getMinMaxAv(int pop[][11], int pop_size);
 void sortRandom(int array[]);
 void sortOrderAv(int array[][11], unsigned int array_size);
 void getAv(int array[]);
-void getMinMaxAv();
 void tour(int parents[][11], int p_index[], int tour_size, int n_sons);
 void crossOverAll(int parents[][11], int p_index[], int sons[][11], int n_sons,
                   int mutate_percent);
@@ -17,50 +17,68 @@ void mutation(int array[]);
 void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons);
 
 int av_min = 1000000000, av_max = 0;
-int av_mini = 0, av_maxi = 0;
 
 int main() {
   // sendmory
-  int pop_size = 100;
-  int n_sons = 80;
-  int mutate_percent = 10;
-
-  int p[pop_size][11];
-  int p_index[80];
-  int sons[n_sons][11];
-
   srand((unsigned)666);
 
-  generatePop(p, pop_size);
+  //PARAMETROS DO AG
+  static int pop_size = 100;
+  static int n_sons = 80;
+  static int n_ger = 200;
+  static int mutate_percent = 10;
 
-  tour(p, p_index, 3, n_sons);
-  crossOverAll(p, p_index, sons, n_sons, mutate_percent);
+  //PAIS E FILHOS
+  int p[pop_size][11];
+  int p_index[n_sons];
+  int sons[n_sons][11];
 
+  //Numero de execuções
+  int n_execucao = 1000;
+  int n_zero =0;
+
+  for (int ag_n = 0; ag_n < n_execucao; ag_n++) {
+    av_min = 10000000, av_max = 0;
+
+    generatePop(p, pop_size);
+    getMinMaxAv(p, pop_size);
+
+    for (size_t i = 0; i < n_ger; i++) {
+      tour(p, p_index, 3, n_sons);
+      crossOverAll(p, p_index, sons, n_sons, mutate_percent);
+      updatePop(p, pop_size, sons, n_sons);
+      getMinMaxAv(p, pop_size);
+    }
+    printf("\n Melhor avalição na execução %i foi: %i", ag_n, av_min);
+
+    if(av_min==0){
+      n_zero++;
+    }
+
+  }
+
+  printf("\nPorcentagem de sucesso %lf\n",(double)n_zero/n_execucao);
 }
 
 void generatePop(int pop[][11], int pop_size) {
   int n[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-  for (int j = 0; j < pop_size; j++) {
+  for (int i = 0; i < pop_size; i++) {
     sortRandom(n);
-    memcpy(pop[j], n, sizeof(int) * 10);
+    memcpy(pop[i], n, sizeof(int) * 10);
+    getAv(pop[i]);
+  }
+}
 
-    getAv(pop[j]);
-
-    if (pop[j][10] < av_min) {
-      av_min = pop[j][10];
-      av_mini = j;
+void getMinMaxAv(int pop[][11], int pop_size) {
+  for (int i = 0; i < pop_size; i++) {
+    if (pop[i][10] < av_min) {
+      av_min = pop[i][10];
     }
 
-    if (pop[j][10] > av_max) {
-      av_max = pop[j][10];
-      av_maxi = j;
+    if (pop[i][10] > av_max) {
+      av_max = pop[i][10];
     }
   }
-
-  sortOrderAv(pop, pop_size);
-
-  printf("Av min: %i  Av min index: %i\n", av_min, av_mini);
-  printf("Av max: %i  Av max index: %i\n", av_max, av_maxi);
 }
 
 void sortRandom(int array[]) {
@@ -74,19 +92,16 @@ void sortRandom(int array[]) {
   }
 }
 
-void sortOrderAv(int array[][11], unsigned int array_size){
+void sortOrderAv(int array[][11], unsigned int array_size) {
   int a[11];
-  for (int i = 0; i < array_size; ++i)
-  {
-      for (int j = i + 1; j < array_size; ++j)
-      {
-          if (array[i][10] > array[j][10])
-          {
-              memcpy(a, array[i], sizeof(int)*11);
-              memcpy(array[i], array[j], sizeof(int)*11);
-              memcpy(array[j], a, sizeof(int)*11);
-          }
+  for (int i = 0; i < array_size; ++i) {
+    for (int j = i + 1; j < array_size; ++j) {
+      if (array[i][10] > array[j][10]) {
+        memcpy(a, array[i], sizeof(int) * 11);
+        memcpy(array[i], array[j], sizeof(int) * 11);
+        memcpy(array[j], a, sizeof(int) * 11);
       }
+    }
   }
 }
 
@@ -102,14 +117,14 @@ void getAv(int array[]) {
 void tour(int parents[][11], int p_index[], int tour_size, int n_sons) {
 
   for (int i = 0; i < n_sons; i++) {
-    int best_av = 0;
+    int best_av = 1000000000;
     int best_index = -1;
 
-    for (int n = 0; n < 2 * tour_size; n += 2) {
+    for (int n = 0; n <  tour_size; n++) {
       int aux_i = rand() % 100;
       int aux_av = parents[aux_i][10];
 
-      if (aux_av > best_av) {
+      if (aux_av < best_av) {
         best_av = aux_av;
         best_index = aux_i;
       }
@@ -122,7 +137,7 @@ void tour(int parents[][11], int p_index[], int tour_size, int n_sons) {
 void crossOverAll(int parents[][11], int p_index[], int sons[][11], int n_sons,
                   int mutate_percent) {
   for (size_t i = 0; i < n_sons; i += 2) {
-    crossOver(parents[i], parents[i + 1], sons[i], sons[i + 1], mutate_percent);
+    crossOver(parents[p_index[i]], parents[p_index[i + 1]], sons[i], sons[i + 1], mutate_percent);
   }
 }
 
@@ -167,6 +182,14 @@ void mutation(int array[]) {
   array[8] = array[index];
 }
 
-void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons){
-  memcpy(parents[p_size-n_sons], sons, sizeof(int)*11*n_sons);
+void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons) {
+  int parents_sons[p_size + n_sons][11];
+
+  memcpy(parents_sons[0], parents, sizeof(int)*p_size*11);
+  memcpy(parents_sons[p_size], sons, sizeof(int)*n_sons*11);
+
+  sortOrderAv(parents_sons, p_size + n_sons);
+
+  memcpy(parents, parents_sons, p_size);
+
 }
