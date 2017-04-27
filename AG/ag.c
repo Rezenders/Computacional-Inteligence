@@ -18,6 +18,7 @@ void crossOver(int parent1[], int parent2[], int son1[], int son2[],
 void mutation(int array[]);
 void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
                int type);
+void setRoulette(int parents[][11], int p_size, double roulette[]);
 
 int av_min = 1000000000, av_max = 0;
 
@@ -203,5 +204,17 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
     break;
   default:
     break;
+  }
+}
+
+void setRoulette(int parents[][11], int p_size, double roulette[]) {
+  long int av_total = 0;
+  for (int i = 0; i < p_size; i++) {
+    av_total += (100000 - parents[i][10]);
+  }
+
+  roulette[0] = (100000 - parents[0][10]) / av_total;
+  for (int j = 1; j < p_size; j++) {
+    roulette[j] = roulette[j - 1] + (100000 - parents[j][10]) / av_total;
   }
 }
