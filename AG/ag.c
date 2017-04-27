@@ -3,6 +3,8 @@
 #include "time.h"
 #include <string.h>
 
+enum selection_t { MPF, ELIT };
+
 void generatePop(int pop[][11], int pop_size);
 void getMinMaxAv(int pop[][11], int pop_size);
 void sortRandom(int array[]);
@@ -14,7 +16,8 @@ void crossOverAll(int parents[][11], int p_index[], int sons[][11], int n_sons,
 void crossOver(int parent1[], int parent2[], int son1[], int son2[],
                int mutate_percent);
 void mutation(int array[]);
-void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons);
+void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
+               int type);
 
 int av_min = 1000000000, av_max = 0;
 
@@ -46,7 +49,7 @@ int main() {
     for (size_t i = 0; i < n_ger; i++) {
       tour(p, p_index, 3, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);
-      updatePop(p, pop_size, sons, n_sons);
+      updatePop(p, pop_size, sons, n_sons, ELIT);
       getMinMaxAv(p, pop_size);
     }
     printf("\n Melhor avalição na execução %i foi: %i", ag_n, av_min);
@@ -182,13 +185,23 @@ void mutation(int array[]) {
   array[8] = array[index];
 }
 
-void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons) {
+void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
+               int type) {
   int parents_sons[p_size + n_sons][11];
+  switch (type) {
+  case MPF:
+    memcpy(parents_sons[0], parents, sizeof(int) * p_size * 11);
+    memcpy(parents_sons[p_size], sons, sizeof(int) * n_sons * 11);
 
-  memcpy(parents_sons[0], parents, sizeof(int) * p_size * 11);
-  memcpy(parents_sons[p_size], sons, sizeof(int) * n_sons * 11);
+    sortOrderAv(parents_sons, p_size + n_sons);
 
-  sortOrderAv(parents_sons, p_size + n_sons);
-
-  memcpy(parents, parents_sons, p_size);
+    memcpy(parents, parents_sons, p_size);
+    break;
+  case ELIT:
+    // sortOrderAv(parents, p_size);
+    memcpy(parents[20], sons, sizeof(int) * n_sons * 11);
+    break;
+  default:
+    break;
+  }
 }
