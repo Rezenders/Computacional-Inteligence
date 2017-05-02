@@ -19,6 +19,7 @@ void mutation(int array[]);
 void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
                int type);
 void setRoulette(int parents[][11], int p_size, double roulette[]);
+void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons);
 
 int av_min = 1000000000, av_max = 0;
 
@@ -59,7 +60,9 @@ int main() {
       n_zero++;
     }
   }
-
+  double roulette[100];
+  setRoulette(p, pop_size, roulette);
+  spinRoulette(roulette, pop_size, p_index, n_sons);
   printf("\nPorcentagem de sucesso %lf\n", (double)n_zero / n_execucao);
 }
 
@@ -212,9 +215,24 @@ void setRoulette(int parents[][11], int p_size, double roulette[]) {
   for (int i = 0; i < p_size; i++) {
     av_total += (100000 - parents[i][10]);
   }
-
-  roulette[0] = (100000 - parents[0][10]) / av_total;
+  long int mult_factor = 100000;
+  roulette[0] = mult_factor*((double)(100000 - parents[0][10]) / av_total);
+  // printf("\n%lf",roulette[0]);
   for (int j = 1; j < p_size; j++) {
-    roulette[j] = roulette[j - 1] + (100000 - parents[j][10]) / av_total;
+    roulette[j] = (roulette[j - 1] + mult_factor*(100000 - parents[j][10]) / (double)av_total);
+    // printf("\n%lf",roulette[j]);
+  }
+}
+
+void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons){
+  for(int i=0; i<n_sons; i++){
+    double chance = (rand()%100001) ;
+    for(int r_index =0; r_index<p_size; r_index++){
+      if(chance <=roulette[r_index]){
+        p_index[i] = r_index;
+        break;
+      }
+    }
+    printf("\n%i",p_index[i]);
   }
 }
