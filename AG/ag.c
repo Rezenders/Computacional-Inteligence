@@ -42,6 +42,8 @@ int main() {
   int n_execucao = 1000;
   int n_zero = 0;
 
+  double roulette[100];
+
   for (int ag_n = 0; ag_n < n_execucao; ag_n++) {
     av_min = 10000000, av_max = 0;
 
@@ -49,9 +51,11 @@ int main() {
     getMinMaxAv(p, pop_size);
 
     for (size_t i = 0; i < n_ger; i++) {
-      tour(p, p_index, 3, n_sons);
+      // tour(p, p_index, 3, n_sons);
+      setRoulette(p, pop_size, roulette);
+      spinRoulette(roulette, pop_size, p_index, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);
-      updatePop(p, pop_size, sons, n_sons, ELIT);
+      updatePop(p, pop_size, sons, n_sons, MPF);
       getMinMaxAv(p, pop_size);
     }
     printf("\n Melhor avalição na execução %i foi: %i", ag_n, av_min);
@@ -60,9 +64,7 @@ int main() {
       n_zero++;
     }
   }
-  double roulette[100];
-  setRoulette(p, pop_size, roulette);
-  spinRoulette(roulette, pop_size, p_index, n_sons);
+
   printf("\nPorcentagem de sucesso %lf\n", (double)n_zero / n_execucao);
 }
 
@@ -202,7 +204,7 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
     memcpy(parents, parents_sons, p_size);
     break;
   case ELIT:
-    // sortOrderAv(parents, p_size);
+    sortOrderAv(parents, p_size);
     memcpy(parents[20], sons, sizeof(int) * n_sons * 11);
     break;
   default:
@@ -233,6 +235,6 @@ void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons){
         break;
       }
     }
-    printf("\n%i",p_index[i]);
+    // printf("\n%i",p_index[i]);
   }
 }
