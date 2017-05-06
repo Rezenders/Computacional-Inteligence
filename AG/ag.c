@@ -42,7 +42,7 @@ int main() {
   int n_execucao = 1000;
   int n_zero = 0;
 
-  double roulette[100];
+  double roulette[pop_size];
 
   for (int ag_n = 0; ag_n < n_execucao; ag_n++) {
     av_min = 10000000, av_max = 0;
@@ -55,7 +55,7 @@ int main() {
       setRoulette(p, pop_size, roulette);
       spinRoulette(roulette, pop_size, p_index, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);
-      updatePop(p, pop_size, sons, n_sons, MPF);
+      updatePop(p, pop_size, sons, n_sons, ELIT);
       getMinMaxAv(p, pop_size);
     }
     printf("\n Melhor avalição na execução %i foi: %i", ag_n, av_min);
@@ -185,10 +185,17 @@ void crossOver(int parent1[], int parent2[], int son1[], int son2[],
 }
 
 void mutation(int array[]) {
-  int index = rand() % 8;
+  int index = rand() % 10;
+  int index2 = rand() % 10;
   int temp = array[index];
-  array[index] = array[8];
-  array[8] = array[index];
+  array[index] = array[index2];
+  array[index2] = temp;
+
+  // int index = rand() % 8;
+  // int index2 = 8;
+  // int temp = array[index];
+  // array[index] = array[index2];
+  // array[index2] = temp;
 }
 
 void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
