@@ -29,9 +29,10 @@ int main() {
 
   // PARAMETROS DO AG
   static int pop_size = 100;
-  static int n_sons = 80;
-  static int n_ger = 200;
-  static int mutate_percent = 10;
+  double cros_over = 0.8;
+  int n_sons = pop_size*cros_over;
+  static int n_ger = 250;
+  static int mutate_percent = 25;
 
   // PAIS E FILHOS
   int p[pop_size][11];
@@ -51,7 +52,7 @@ int main() {
     getMinMaxAv(p, pop_size);
 
     for (size_t i = 0; i < n_ger; i++) {
-      // tour(p, p_index, 3, n_sons);
+      // tour(p, p_index, 10, n_sons);
       setRoulette(p, pop_size, roulette);
       spinRoulette(roulette, pop_size, p_index, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);
@@ -148,6 +149,11 @@ void crossOverAll(int parents[][11], int p_index[], int sons[][11], int n_sons,
     crossOver(parents[p_index[i]], parents[p_index[i + 1]], sons[i],
               sons[i + 1], mutate_percent);
   }
+
+  // int mutation_size = n_sons*((double)mutate_percent/100);
+  // for (int m = 0; m < mutation_size; m++) {
+  //   mutation(sons[rand()%80]);
+  // }
 }
 
 void crossOver(int parent1[], int parent2[], int son1[], int son2[],
