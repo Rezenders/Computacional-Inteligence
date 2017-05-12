@@ -4,6 +4,7 @@
 #include <string.h>
 
 enum selection_t { MPF, ELIT };
+enum cases_t { SEND, EAT, CROSS, COCA, DONALD };
 
 void generatePop(int pop[][11], int pop_size);
 void getMinMaxAv(int pop[][11], int pop_size);
@@ -21,7 +22,9 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
 void setRoulette(int parents[][11], int p_size, double roulette[]);
 void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons);
 
+int av_type = COCA;
 int av_min = 1000000000, av_max = 0;
+long int roulette_inv = 100000;
 
 int main() {
   // sendmory
@@ -30,8 +33,8 @@ int main() {
   // PARAMETROS DO AG
   static int pop_size = 100;
   double cros_over = 0.8;
-  int n_sons = pop_size*cros_over;
-  static int n_ger = 250;
+  int n_sons = pop_size * cros_over;
+  static int n_ger = 200;
   static int mutate_percent = 25;
 
   // PAIS E FILHOS
@@ -116,10 +119,48 @@ void sortOrderAv(int array[][11], unsigned int array_size) {
 
 void getAv(int array[]) {
   int aux;
-  aux = (array[0] * 1000 + array[1] * 100 + array[2] * 10 + array[3]) +
-        (array[4] * 1000 + array[5] * 100 + array[6] * 10 + array[1]) -
-        (array[4] * 10000 + array[5] * 1000 + array[2] * 100 + array[1] * 10 +
-         array[7]);
+  switch (av_type) {
+  case SEND:
+    aux = (array[4] * 10000 + array[5] * 1000 + array[2] * 100 + array[1] * 10 +
+           array[7]) -
+          (array[0] * 1000 + array[1] * 100 + array[2] * 10 + array[3]) -
+          (array[4] * 1000 + array[5] * 100 + array[6] * 10 + array[1]);
+
+    roulette_inv = 100000;
+    break;
+  case EAT:
+    aux = (array[1] * 10000 + array[4] * 1000 + array[4] * 100 + array[5] * 10 +
+           array[0] * 1) -
+          (array[0] * 100 + array[1] * 10 + array[3] * 1) -
+          (array[2] * 1000 + array[3] * 100 + array[1] * 10 + array[2] * 1);
+    roulette_inv = 100000;
+    break;
+  case CROSS:
+    aux = (array[5] * 100000 + array[4] * 10000 + array[6] * 1000 +
+           array[7] * 100 + array[8] * 10 + array[1] * 1) -
+          (array[0] * 10000 + array[1] * 1000 + array[2] * 100 + array[3] * 10 +
+           array[3] * 1) -
+          (array[1] * 10000 + array[2] * 1000 + array[4] * 100 + array[5] * 10 +
+           array[3] * 1);
+    roulette_inv = 1000000;
+    break;
+  case COCA:
+    aux = (array[1] * 10000 + array[2] * 1000 + array[4] * 100 + array[5] * 10 +
+           array[4] * 1) -
+          (array[0] * 1000 + array[1] * 100 + array[0] * 10 + array[2] * 1) -
+          (array[0] * 1000 + array[1] * 100 + array[3] * 10 + array[2] * 1);
+    roulette_inv = 100000;
+    break;
+  case DONALD:
+    aux = (array[7] * 100000 + array[1] * 10000 + array[8] * 1000 +
+           array[6] * 100 + array[7] * 10 + array[9] * 1) -
+          (array[0] * 100000 + array[1] * 10000 + array[2] * 1000 +
+           array[3] * 100 + array[4] * 10 + array[0] * 1) -
+          (array[5] * 100000 + array[6] * 10000 + array[7] * 1000 +
+           array[3] * 100 + array[4] * 10 + array[0] * 1);
+    roulette_inv = 1000000;
+    break;
+  }
   array[10] = abs(aux);
 }
 
@@ -228,22 +269,25 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
 void setRoulette(int parents[][11], int p_size, double roulette[]) {
   long int av_total = 0;
   for (int i = 0; i < p_size; i++) {
-    av_total += (100000 - parents[i][10]);
+    av_total += (roulette_inv - parents[i][10]);
   }
   long int mult_factor = 100000;
-  roulette[0] = mult_factor*((double)(100000 - parents[0][10]) / av_total);
+  roulette[0] =
+      mult_factor * ((double)(roulette_inv - parents[0][10]) / av_total);
   // printf("\n%lf",roulette[0]);
   for (int j = 1; j < p_size; j++) {
-    roulette[j] = (roulette[j - 1] + mult_factor*(100000 - parents[j][10]) / (double)av_total);
+    roulette[j] =
+        (roulette[j - 1] +
+         mult_factor * (roulette_inv - parents[j][10]) / (double)av_total);
     // printf("\n%lf",roulette[j]);
   }
 }
 
-void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons){
-  for(int i=0; i<n_sons; i++){
-    double chance = (rand()%100001) ;
-    for(int r_index =0; r_index<p_size; r_index++){
-      if(chance <=roulette[r_index]){
+void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons) {
+  for (int i = 0; i < n_sons; i++) {
+    double chance = (rand() % 100001);
+    for (int r_index = 0; r_index < p_size; r_index++) {
+      if (chance <= roulette[r_index]) {
         p_index[i] = r_index;
         break;
       }
