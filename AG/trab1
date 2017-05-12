@@ -1,0 +1,44 @@
+TM 10%
+Tour MPF = 43,6% time: 45,58s
+Tour ELIT = 46,2% time: 5,13s
+Roleta MPF = 40,2% time: 46,47s
+Roleta ELITISMO = 69,8% time: 9,12s
+
+TM 20%
+Tour MPF = 43,5% time: 50,39s
+Tour ELIT = 54,1% time: 5.8s
+Roleta MPF = 42,4% time: 47.15s
+Roleta ELIT = 82,6% time: 10.33s
+
+time= tempo para executar 1000 vezes
+
+roleta elitismo
+mutação porcentagem real e mutacao=20% -> Roleta ELIT = 90,1% time: 10,57s
+mutação porcentagem real e mutacao = 25% -> Roleta ELIT = 94,5% time: 10,86s
+mutação porcentagem real e mutacao = 50% -> Roleta ELIT = 98,3% time: 12,29s
+pop_size= 200 mutação porcentagem real e mutacao = 50% -> Roleta ELIT = 100% time: 51,92s
+n_ger= 500 mutacao porcentagem real e mutacao 20% -> Roleta ELIT = 97,0% time = 26,09s
+pop_size = 150 n_ger = 250 mutate 20 -> Roleta ELIT = 98,2% time = 28,191s
+n_ger= 250 mutacao porcentagem real e mutacao 20% -> Roleta ELIT = 92,6% time = 12,58s
+n_ger= 250 mutacao porcentagem real e mutacao 25% -> Roleta ELIT = 95,1% time = 13,70s
+
+tour elit
+mutação porcentagem real e mutacao=20% -> Tour 3 ELIT = 56,5% time: 6,32s
+mutação porcentagem real e mutacao=25% -> Tour 3 ELIT = 63,2% time: 6,59s
+mutação porcentagem real e mutacao=50% -> Tour 3 ELIT = 86,5% time: 8,23s
+pop_size= 200 mutação porcentagem real e mutacao = 50% -> Tour 3 ELIT = 94,9% time: 32,16s
+n_ger= 500 mutacao porcentagem real e mutacao 20% -> Tour 3 ELIT = 58,9% time = 15,46s
+mutação porcentagem real e mutacao=20% -> Tour 5 ELIT = 50,1% time: 6,38s
+
+mutação porcentagem real e mutacao=20% -> Tour 5 MPF = 67,9% time: 41,00s
+mutação porcentagem real e mutacao=50% -> Tour 5 MPF = 77,9% time: 40,862s
+pop_size=200 mutação porcentagem real e mutacao=20% -> Tour 5 MPF = 85,5% time: 172,87s
+
+NOVAS PALAVRAS - mutação porcentagem real e mutacao = 25% ROLETA ELIT
+EAT: 0,0% 10,18s
+CROSS: 1,0% 10,56s
+COCA: 9,5% 10,34s
+DONALD: 5,1% 10,31s
+
+
+https://staff.fnwi.uva.nl/m.mazloom/Papers/mazloom-milad.pdf
