@@ -31,7 +31,7 @@ int main() {
   static int pop_size = 100;
   double cros_over = 0.8;
   int n_sons = pop_size*cros_over;
-  static int n_ger = 250;
+  static int n_ger = 200;
   static int mutate_percent = 25;
 
   // PAIS E FILHOS
