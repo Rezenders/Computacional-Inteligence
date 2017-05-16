@@ -22,7 +22,7 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
 void setRoulette(int parents[][11], int p_size, double roulette[]);
 void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons);
 
-int av_type = COCA;
+int av_type = EAT;
 int av_min = 1000000000, av_max = 0;
 long int roulette_inv = 100000;
 
@@ -131,7 +131,7 @@ void getAv(int array[]) {
   case EAT:
     aux = (array[1] * 10000 + array[4] * 1000 + array[4] * 100 + array[5] * 10 +
            array[0] * 1) -
-          (array[0] * 100 + array[1] * 10 + array[3] * 1) -
+          (array[0] * 100 + array[1] * 10 + array[2] * 1) -
           (array[2] * 1000 + array[3] * 100 + array[1] * 10 + array[2] * 1);
     roulette_inv = 100000;
     break;
