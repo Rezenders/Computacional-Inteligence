@@ -22,7 +22,7 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
 void setRoulette(int parents[][11], int p_size, double roulette[]);
 void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons);
 
-int av_type = EAT;
+int av_type = CROSS;
 int av_min = 1000000000, av_max = 0;
 long int roulette_inv = 100000;
 
@@ -238,11 +238,6 @@ void mutation(int array[]) {
   array[index] = array[index2];
   array[index2] = temp;
 
-  // int index = rand() % 8;
-  // int index2 = 8;
-  // int temp = array[index];
-  // array[index] = array[index2];
-  // array[index2] = temp;
 }
 
 void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
