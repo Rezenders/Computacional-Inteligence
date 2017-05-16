@@ -127,8 +127,8 @@
   \item DONALD + GERALD = ROBERT.
   \end{enumerate}
 
-  Os resultados encontrados não foram satisfatórios e podem ser encontrados na
-  Tabela \ref{tab:etapa3}.
+Os resultados encontrados não foram satisfatórios e podem ser encontrados na
+Tabela \ref{tab:etapa3}.
 
   \begin{table}[h]
     \centering
@@ -149,6 +149,38 @@
     \label{tab:etapa3}
   \end{table}
 
-  A fim de melhorar os resultados novas funções de avaliação foram definidas.
+A fim de melhorar os resultados testou-se funções de avaliação a seguir:
+
+  \begin{equation}
+    Av = (\prod_{i=1}^{N} (1+\mid R_i - E_i\mid)) -1
+    \label{eq:avprod}
+  \end{equation}
+Onde:
+  \begin{description}
+    \item[\(Av\)] = Avaliação
+    \item[\(R_i\)] = i-esima letra do resultado da soma
+    \item[\(E_i\)] = i-esima letra do resultado esperado
+  \end{description}
+
+Para a eq. \ref{eq:avprod} os resultados encontrados estão na Tabela \ref{tab:avprodt}.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Problema & Convergência & Tempo \\
+    \hline
+    1 & 26,2\% & 10,53s \\
+    \hline
+    2 & 1,0\% & 10,56s \\
+    \hline
+    3 & 9,5\% & 10,34s \\
+    \hline
+    4 & 5,1\% & 10,31s \\
+    \hline
+  \end{tabular}
+  \caption{Resultados da terceira etapa com a avaliação 1}
+  \label{tab:avprodt}
+\end{table}
 
 \end{document}
