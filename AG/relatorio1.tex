@@ -127,8 +127,8 @@
   \item DONALD + GERALD = ROBERT.
   \end{enumerate}
 
-  Os resultados encontrados não foram satisfatórios e podem ser encontrados na
-  Tabela \ref{tab:etapa3}.
+Os resultados encontrados não foram satisfatórios e podem ser encontrados na
+Tabela \ref{tab:etapa3}.
 
   \begin{table}[h]
     \centering
@@ -136,17 +136,94 @@
       \hline
       Problema & Convergência & Tempo \\
       \hline
-      1 & 26,2\% & 10,53s \\
+      1-EAT & 26,2\% & 10,53s \\
       \hline
-      2 & 1,0\% & 10,56s \\
+      2-CROSS & 1,0\% & 10,56s \\
       \hline
-      3 & 9,5\% & 10,34s \\
+      3-COCA & 9,5\% & 10,34s \\
       \hline
-      4 & 5,1\% & 10,31s \\
+      4-DONALD & 5,1\% & 10,31s \\
       \hline
     \end{tabular}
     \caption{Resultados da terceira etapa}
     \label{tab:etapa3}
+  \end{table}
+
+A fim de melhorar os resultados testou-se as funções de avaliação a seguir:
+
+  \begin{equation}
+    Av = (\prod_{i=1}^{N} (1+\mid R_i - E_i\mid)) -1
+    \label{eq:avprod}
+  \end{equation}
+Onde:
+  \begin{description}
+    \item[\(Av\)] = Avaliação
+    \item[\(R_i\)] = i-esima letra do resultado da soma
+    \item[\(E_i\)] = i-esima letra do resultado esperado
+  \end{description}
+
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      \hline
+      1 & 100 & 200 & Roleta & ELIT & 50\% &21,3\% & 13,84s \\
+      \hline
+      1 & 100 & 200 & Tour 2 & ELIT & 50\% &17,2\% & 9,72s \\
+      \hline
+    \end{tabular}
+    \caption{Novas avaliações para EAT + THAT}
+    \label{tab:eat}
+  \end{table}
+
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      \hline
+      1 & 100 & 200 & Roleta & ELIT & 50\% &4,0\% & 14,10s \\
+      \hline
+      1 & 100 & 200 & Tour 2 & ELIT & 50\% &5,2\% & 10,31s \\
+      \hline
+    \end{tabular}
+    \caption{Novas avaliações para CROSS + ROADS}
+    \label{tab:cross}
+  \end{table}
+
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      \hline
+      1 & 100 & 200 & Roleta & ELIT & 50\% &43,9\% & 13,60s\\
+      \hline
+      1& 100 & 200 & Tour 1 & ELIT & 50\% &45,7\% & 11,189s\\
+      \hline
+    \end{tabular}
+    \caption{Novas avaliações para COCA + COLA}
+    \label{tab:coca}
+  \end{table}
+
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      \hline
+      1 & 100 & 200 & Roleta & ELIT & 50\% &38,7\% & 14,05s\\
+      \hline
+      1 & 100 & 200 & Roleta & ELIT & 70\% &45,7\% & 14,42s\\
+      \hline
+      1 & 100 & 200 & Roleta & ELIT & 90\% &53,5\% & 14,95s\\
+      \hline
+      1 & 100 & 200 & Tour 1 & ELIT & 50\% &38,0\% & 11,61s\\
+      \hline
+    \end{tabular}
+    \caption{Novas avaliações para DONALD + GERALD}
+    \label{tab:donald}
   \end{table}
 
 \end{document}
