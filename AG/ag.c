@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "time.h"
+#include "math.h"
 #include <string.h>
 
 enum selection_t { MPF, ELIT };
@@ -22,9 +23,9 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
 void setRoulette(int parents[][11], int p_size, double roulette[]);
 void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons);
 
-int av_type = CROSS;
+int av_type = EAT;
 int av_min = 1000000000, av_max = 0;
-long int roulette_inv = 100000;
+unsigned long int roulette_inv = 100000;
 
 int main() {
   // sendmory
@@ -35,7 +36,7 @@ int main() {
   double cros_over = 0.8;
   int n_sons = pop_size*cros_over;
   static int n_ger = 200;
-  static int mutate_percent = 25;
+  static int mutate_percent = 30;
 
   // PAIS E FILHOS
   int p[pop_size][11];
@@ -55,7 +56,7 @@ int main() {
     getMinMaxAv(p, pop_size);
 
     for (size_t i = 0; i < n_ger; i++) {
-      // tour(p, p_index, 10, n_sons);
+      // tour(p, p_index, 3, n_sons);
       setRoulette(p, pop_size, roulette);
       spinRoulette(roulette, pop_size, p_index, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);
@@ -118,23 +119,54 @@ void sortOrderAv(int array[][11], unsigned int array_size) {
 }
 
 void getAv(int array[]) {
-  int aux;
+  unsigned int aux, sum;
+  unsigned int mult = 1, degree = 5;
   switch (av_type) {
   case SEND:
-    aux = (array[4] * 10000 + array[5] * 1000 + array[2] * 100 + array[1] * 10 +
-           array[7]) -
-          (array[0] * 1000 + array[1] * 100 + array[2] * 10 + array[3]) -
+    // sum = (array[0] * 1000 + array[1] * 100 + array[2] * 10 + array[3]) +
+    //       (array[4] * 1000 + array[5] * 100 + array[6] * 10 + array[1]);
+    //
+    // aux = pow(abs((array[7] - sum % 10)*mult), degree) + pow(abs((array[1] - (sum / 10) % 10)*mult), degree) +
+    //       pow(abs((array[2] - (sum / 100) % 10)*mult), degree) + pow(abs((array[5] - (sum / 1000) % 10)*mult), degree) +
+    //       pow(abs((array[4] - (sum / 10000) % 10)*mult), degree);
+    //
+    // roulette_inv = pow(9*mult, degree);
+
+    sum = (array[0] * 1000 + array[1] * 100 + array[2] * 10 + array[3]) +
           (array[4] * 1000 + array[5] * 100 + array[6] * 10 + array[1]);
 
-    roulette_inv = 100000;
+    aux = (1+ pow(abs((array[7] - sum % 10)*mult), degree)) * (1+ pow(abs((array[1] - (sum / 10) % 10)*mult), degree)) *
+          (1+ pow(abs((array[2] - (sum / 100) % 10)*mult), degree)) * (1+ pow(abs((array[5] - (sum / 1000) % 10)*mult), degree)) *
+          (1+ pow(abs((array[4] - (sum / 10000) % 10)*mult), degree));
+
+    aux = aux-1;
+    roulette_inv = pow(pow(9,degree),6);
+
+
+    // aux = (array[4] * 10000 + array[5] * 1000 + array[2] * 100 + array[1] * 10 +
+    //        array[7]) -
+    //       (array[0] * 1000 + array[1] * 100 + array[2] * 10 + array[3]) -
+    //       (array[4] * 1000 + array[5] * 100 + array[6] * 10 + array[1]);
+    //
+    // roulette_inv = 100000;
     break;
   case EAT:
-    aux = (array[1] * 10000 + array[4] * 1000 + array[4] * 100 + array[5] * 10 +
-           array[0] * 1) -
-          (array[0] * 100 + array[1] * 10 + array[2] * 1) -
+    sum = (array[0] * 100 + array[1] * 10 + array[2] * 1) +
           (array[2] * 1000 + array[3] * 100 + array[1] * 10 + array[2] * 1);
-    roulette_inv = 100000;
-    break;
+
+    aux = (1+ pow(abs((array[0] - sum % 10)*mult), degree)) * (1+ pow(abs((array[5] - (sum / 10) % 10)*mult), degree)) *
+          (1+ pow(abs((array[4] - (sum / 100) % 10)*mult), degree)) * (1+ pow(abs((array[4] - (sum / 1000) % 10)*mult), degree)) *
+          (1+ pow(abs((array[1] - (sum / 10000) % 10)*mult), degree));
+    aux = aux-1;
+    // aux = (array[1] * 10000 + array[4] * 1000 + array[4] * 100 + array[5] * 10 +
+    //        array[0] * 1) -
+    //       (array[0] * 100 + array[1] * 10 + array[2] * 1) -
+    //       (array[2] * 1000 + array[3] * 100 + array[1] * 10 + array[2] * 1);
+    // roulette_inv = 100000;
+    break;    // aux = (array[1] * 10000 + array[4] * 1000 + array[4] * 100 + array[5] * 10 +
+    //        array[0] * 1) -
+    //       (array[0] * 100 + array[1] * 10 + array[2] * 1) -
+    //       (array[2] * 1000 + array[3] * 100 + array[1] * 10 + array[2] * 1);
   case CROSS:
     aux = (array[5] * 100000 + array[4] * 10000 + array[6] * 1000 +
            array[7] * 100 + array[8] * 10 + array[1] * 1) -
