@@ -1,0 +1,121 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+
+\title {Trabalho 1 - Inteligência Computacional}
+\date{\today}
+\author{Gustavo Rezende Silva}
+
+\begin{document}
+  \maketitle
+  \pagenumbering{gobble}
+  \newpage
+
+  \pagenumbering{arabic}
+  \section{Desenvolvimento}
+
+  \subsection{Etapa 1}
+    Nesta fase o AG foi configurado com algumas carecterísticas fixas,
+    e outras que foram alteradas, totalizando 8 diferentes configurações,
+    e seus resultados comparados. Estas se encontram a seguir:
+
+    Fixas:
+    \begin{itemize}
+    \item População de 100 indivíduos;
+    \item Cross Over de 80% e cíclico;
+    \item 200 gerações;
+    \item Mutação deterministica.
+    \end{itemize}
+
+    Variáveis:
+    \begin{itemize}
+    \item Sorteio: Tour 3 e Roleta;
+    \item Método de Substituição: Melhores entre pais e filhos (MPF) e Elitismo;
+    \item Taxa de mutação: 10\% e 20\%.
+    \end{itemize}
+
+    Para cada configuração o programa foi executado 1000 vezes e sua taxa de
+     convergência e tempo de execução foram anotados. Os resultados encontrados
+     se encontram na Tabela \ref{tab:etapa1}.
+
+    \begin{table}[h]
+      \centering
+      \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        N & Sorteio & Sub & Mutação & Convergência & Tempo \\
+        \hline
+        1 & Tour 3 & MPF & 10\% & 43,6\% & 45,58s \\
+        \hline
+        2 & Tour 3 & ELIT & 10\% & 46,2\% & 5,13s \\
+        \hline
+        3 & Tour 3 & MPF & 20\% & 43,5\% & 50,39s \\
+        \hline
+        4 & Tour 3 & ELIT & 20\% & 54,1\% & 5,8s \\
+        \hline
+        5 & Roleta & MPF & 10\% & 40,2\% & 46,47s \\
+        \hline
+        6 & Roleta & ELIT & 10\% & 69,8\% & 9,12s \\
+        \hline
+        7 & Roleta & MPF & 20\% & 42,4\% & 47,15s \\
+        \hline
+        8 & Roleta & ELIT & 20\% & 82,6\% & 10,33s \\
+        \hline
+      \end{tabular}
+      \caption{Resultados da primeira etapa}
+      \label{tab:etapa1}
+    \end{table}
+
+  Observando os resultados das configurações propostas a que se mostrou mais
+  eficiente foi a numero oito (Tabela \ref{tab:etapa1}). Uma vez que a taxa de convergência é a
+  ma mais alta e seu tempo de execução é relativamente baixo comparado com os demais.
+
+  \subsection{Etapa 2}
+  A segunda etapa teve como objetivo alterar os parâmetros, fixos ou variáveis,
+  da primeira com o intuito de encontrar um resultado melhor. Neste trabalho
+  a mutação deterministica foi trocada pela de probabilidade real.
+
+  As novas configurações adotadas e seus resultados se encontram na Tabela \ref{tab:etapa2}.
+
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      N & População & Gerações & Sorteio & Sub & Mutação & Convergência & Tempo \\
+      \hline
+      1 & 100 & 200 & Roleta & ELIT & 20\% & 90,1\% & 10,57s \\
+      \hline
+      2 & 100 & 200 & Roleta & ELIT & 25\% & 94,5\% & 10,86s \\
+      \hline
+      3 & 100 & 200 & Roleta & ELIT & 50\% & 98,3\% & 12,29s \\
+      \hline
+      4 & 200 & 200 & Roleta & ELIT & 50\% & 100,0\% & 51,92s \\
+      \hline
+      5 & 100 & 500 & Roleta & ELIT & 20\% & 97,0\% & 26,09s \\
+      \hline
+      6 & 150 & 250 & Roleta & ELIT & 20\% & 98,2\% & 28,19s \\
+      \hline
+      7 & 100 & 250 & Roleta & ELIT & 25\% & 95,1\% & 13,7s \\
+      \hline
+      8 & 100 & 200 & TOUR 3 & ELIT & 50\% & 86,5\% & 8,23s \\
+      \hline
+      9 & 200 & 200 & TOUR 3 & ELIT & 50\% & 94,6\% & 32.16s \\
+      \hline
+      10 & 200 & 200 & TOUR 5 & MPF & 20\% & 85,5\% & 172,87s \\
+      \hline
+    \end{tabular}
+    \caption{Resultados da segunda etapa}
+    \label{tab:etapa2}
+  \end{table}
+
+  Ao analisar os resultados apresentados na Tabela \ref{tab:etapa2} percebemos
+  que a configuração de número 4 obteve 100\% de taxa de convergência, porém,
+  seu tempo de execução é 6,3 vezes o tempo do arranjo 8 que obteve 86,5\%, ou seja,
+  pouco aumento de convergência para muito tempo de execução.
+
+  Comparando o resultado 8 com os demais percebe-se que a disposição 2 é apenas
+  1,3 vezes mais demorada e sua taxa de convergência é 8\% maior, apresentando assim
+  uma boa relação entre tempo de execução e convergência, por isto foi a configuração
+  escolhida.
+
+\end{document}
