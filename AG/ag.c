@@ -32,10 +32,10 @@ int main() {
   srand((unsigned)666);
 
   // PARAMETROS DO AG
-  static int pop_size = 100;
+  static int pop_size = 120;
   double cros_over = 0.8;
   int n_sons = pop_size * cros_over;
-  static int n_ger = 200;
+  static int n_ger = 120;
   static int mutate_percent = 90;
 
   // PAIS E FILHOS
@@ -56,7 +56,7 @@ int main() {
     getMinMaxAv(p, pop_size);
 
     for (size_t i = 0; i < n_ger; i++) {
-      // tour(p, p_index, 1, n_sons);
+      // tour(p, p_index, 3, n_sons);
       setRoulette(p, pop_size, roulette);
       spinRoulette(roulette, pop_size, p_index, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);
@@ -120,60 +120,57 @@ void sortOrderAv(int array[][11], unsigned int array_size) {
 
 void getAv(int array[]) {
   unsigned int aux, sum;
-  unsigned int mult = 1, degree = 5;
+  unsigned int mult = 1;
   switch (av_type) {
   case SEND:
 
     sum = (array[0] * 1000 + array[1] * 100 + array[2] * 10 + array[3]) +
           (array[4] * 1000 + array[5] * 100 + array[6] * 10 + array[1]);
 
-    aux = (1 + pow(abs((array[7] - sum % 10) * mult), degree)) *
-          (1 + pow(abs((array[1] - (sum / 10) % 10) * mult), degree)) *
-          (1 + pow(abs((array[2] - (sum / 100) % 10) * mult), degree)) *
-          (1 + pow(abs((array[5] - (sum / 1000) % 10) * mult), degree)) *
-          (1 + pow(abs((array[4] - (sum / 10000) % 10) * mult), degree));
+    aux = (abs((array[7] - sum % 10) * mult)) +
+          (abs((array[1] - (sum / 10) % 10) * mult)) +
+          (abs((array[2] - (sum / 100) % 10) * mult)) +
+          (abs((array[5] - (sum / 1000) % 10) * mult)) +
+          (abs((array[4] - (sum / 10000) % 10) * mult));
 
-    aux = aux - 1;
-    roulette_inv = pow(pow(9 * mult, degree), 5) + 1;
+    roulette_inv = 9*5*mult +1;
 
     break;
   case EAT:
     sum = (array[0] * 100 + array[1] * 10 + array[2] * 1) +
           (array[2] * 1000 + array[3] * 100 + array[1] * 10 + array[2] * 1);
 
-    aux = (1 + pow(abs((array[0] - sum % 10) * mult), degree)) *
-          (1 + pow(abs((array[5] - (sum / 10) % 10) * mult), degree)) *
-          (1 + pow(abs((array[4] - (sum / 100) % 10) * mult), degree)) *
-          (1 + pow(abs((array[4] - (sum / 1000) % 10) * mult), degree)) *
-          (1 + pow(abs((array[1] - (sum / 10000) % 10) * mult), degree));
-    aux = aux - 1;
-    break;
+    aux = (abs((array[0] - sum % 10) * mult)) +
+          (abs((array[5] - (sum / 10) % 10) * mult)) +
+          (abs((array[4] - (sum / 100) % 10) * mult)) +
+          (abs((array[4] - (sum / 1000) % 10) * mult)) +
+          (abs((array[1] - (sum / 10000) % 10) * mult));
+    roulette_inv = 9*5 +1;
+  break;
   case CROSS:
     sum = (array[0] * 10000 + array[1] * 1000 + array[2] * 100 + array[3] * 10 +
            array[3] * 1) +
           (array[1] * 10000 + array[2] * 1000 + array[4] * 100 + array[5] * 10 +
            array[3] * 1);
 
-    aux = (1 + pow(abs((array[1] - sum % 10) * mult), degree)) *
-          (1 + pow(abs((array[8] - (sum / 10) % 10) * mult), degree)) *
-          (1 + pow(abs((array[7] - (sum / 100) % 10) * mult), degree)) *
-          (1 + pow(abs((array[6] - (sum / 1000) % 10) * mult), degree)) *
-          (1 + pow(abs((array[4] - (sum / 10000) % 10) * mult), degree)) *
-          (1 + pow(abs((array[5] - (sum / 100000) % 10) * mult), degree));
-    aux = aux - 1;
-    roulette_inv = pow(pow(9 * mult, degree), 6) + 1;
+    aux = (abs((array[1] - sum % 10) * mult)) +
+          (abs((array[8] - (sum / 10) % 10) * mult)) +
+          (abs((array[7] - (sum / 100) % 10) * mult)) +
+          (abs((array[6] - (sum / 1000) % 10) * mult)) +
+          (abs((array[4] - (sum / 10000) % 10) * mult)) +
+          (abs((array[5] - (sum / 100000) % 10) * mult));
+    roulette_inv = 9*6 + 1;
     break;
   case COCA:
     sum = (array[0] * 1000 + array[1] * 100 + array[0] * 10 + array[2] * 1) +
           (array[0] * 1000 + array[1] * 100 + array[3] * 10 + array[2] * 1);
 
-    aux = (1 + pow(abs((array[4] - sum % 10) * mult), degree)) *
-          (1 + pow(abs((array[5] - (sum / 10) % 10) * mult), degree)) *
-          (1 + pow(abs((array[4] - (sum / 100) % 10) * mult), degree)) *
-          (1 + pow(abs((array[2] - (sum / 1000) % 10) * mult), degree)) *
-          (1 + pow(abs((array[1] - (sum / 10000) % 10) * mult), degree));
-    aux = aux - 1;
-    roulette_inv = pow(pow(9 * mult, degree), 5) + 1;
+    aux = (abs((array[4] - sum % 10) * mult)) +
+          (abs((array[5] - (sum / 10) % 10) * mult)) +
+          (abs((array[4] - (sum / 100) % 10) * mult)) +
+          (abs((array[2] - (sum / 1000) % 10) * mult)) +
+          (abs((array[1] - (sum / 10000) % 10) * mult));
+    roulette_inv = 9*5 + 1;
     break;
   case DONALD:
     sum = (array[0] * 100000 + array[1] * 10000 + array[2] * 1000 +
@@ -181,17 +178,16 @@ void getAv(int array[]) {
           (array[5] * 100000 + array[6] * 10000 + array[7] * 1000 +
            array[3] * 100 + array[4] * 10 + array[0] * 1);
 
-    aux = (1 + pow(abs((array[9] - sum % 10) * mult), degree)) *
-          (1 + pow(abs((array[7] - (sum / 10) % 10) * mult), degree)) *
-          (1 + pow(abs((array[6] - (sum / 100) % 10) * mult), degree)) *
-          (1 + pow(abs((array[8] - (sum / 1000) % 10) * mult), degree)) *
-          (1 + pow(abs((array[1] - (sum / 10000) % 10) * mult), degree)) *
-          (1 + pow(abs((array[7] - (sum / 100000) % 10) * mult), degree));
-    aux = aux - 1;
-    roulette_inv = pow(pow(9 * mult, degree), 6) + 1;
+    aux = (abs((array[9] - sum % 10) * mult)) +
+          (abs((array[7] - (sum / 10) % 10) * mult)) +
+          (abs((array[6] - (sum / 100) % 10) * mult)) +
+          (abs((array[8] - (sum / 1000) % 10) * mult)) +
+          (abs((array[1] - (sum / 10000) % 10) * mult)) +
+          (abs((array[7] - (sum / 100000) % 10) * mult));
+    roulette_inv = 9*6 + 1;
     break;
   }
-  array[10] = abs(aux);
+  array[10] = aux;
 }
 
 void tour(int parents[][11], int p_index[], int tour_size, int n_sons) {
