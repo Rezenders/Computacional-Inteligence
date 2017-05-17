@@ -2,16 +2,83 @@
 \usepackage[brazil]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{indentfirst}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{color}
 
-\title {Trabalho 1 - Inteligência Computacional}
-\date{\today}
-\author{Gustavo Rezende Silva}
+\restylefloat{table}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Octave,                 % the language of the code
+  morekeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
 \begin{document}
-  \maketitle
+  \begin{center}
+      \vspace*{0.2cm}
+
+      \LARGE
+      \textbf{Algoritmos genéticos para resolução de problemas de criptoaritmética.}
+
+      \vspace{0.5cm}
+
+      Disciplina de Inteligência Computacional - GBC073
+
+      \vspace{6cm}
+
+      \Large
+      Gustavo Rezende Silva - 11311EMT018
+      Professora Dra. Gina Maira Barbosa de Oliveira\\
+
+      \vspace{7cm}
+
+
+
+      \Large
+      Universidade Federal de Uberlândia\\
+
+      17 de maio de 2017
+
+  \end{center}
+
   \pagenumbering{gobble}
   \newpage
 
   \pagenumbering{arabic}
+  \section{Objetivo}
+  Este trabalho tem como objetivo a implementação de um algoritimo genético (AG) para
+  resolução de problemas de criptoaritimética. E ainda, possibilitar que o aluno
+  entenda a através da prática o efeito dos diversos parâmetros e diferentes
+  avaliações nos problemas envolvendo AGs.
+
+
   \section{Desenvolvimento}
 
   \subsection{Etapa 1}
@@ -166,165 +233,197 @@ Onde:
     \item[\(E_i\)] = i-esima letra do resultado esperado
   \end{description}
 
-  \begin{table}[h]
+Os resultados encontrados utilizando estas avaliações com combinações diferentes
+dos parâmetros estão listados nas Tabelas \ref{tab:send} até \ref{tab:donald}.
+
+  \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
       \hline
-      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      N & Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 50\% &72,8\% & 12,42s \\
+      1& 1 & 100 & 200 & Roleta & ELIT & 50\% &72,8\% & 12,42s \\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 90\% &87,2\% & 12,74s \\
+      2& 1 & 100 & 200 & Roleta & ELIT & 90\% &87,2\% & 12,74s \\
       \hline
-      1 & 100 & 200 & Tour 1 & ELIT & 50\% &71,0\% & 9,76s \\
+      3& 1 & 100 & 200 & Tour 1 & ELIT & 50\% &71,0\% & 9,76s \\
       \hline
-      1 & 100 & 200 & Tour 1 & ELIT & 90\% &86,1\% & 10,44s \\
+      4& 1 & 100 & 200 & Tour 1 & ELIT & 90\% &86,1\% & 10,44s \\
       \hline
-      1 & 150 & 150 & Tour 1 & ELIT & 90\% &90,5\% & 15,84s \\
+      5& 1 & 150 & 150 & Tour 1 & ELIT & 100\% &91,8\% & 13,8s \\
       \hline
-      1 & 150 & 150 & Tour 1 & ELIT & 100\% &91,8\% & 13,8s \\
+      6& 1 & 300 & 30 & Tour 2 & ELIT & 90\% &96,0\% & 10,38s \\
       \hline
-      2 & 100 & 200 & Roleta & ELIT & 50\% &73,0\% & 9,83s \\
+      7& 2 & 100 & 200 & Roleta & ELIT & 50\% &73,0\% & 9,83s \\
       \hline
-      2 & 200 & 100 & Roleta & ELIT & 50\% &80,1\% & 15,36s \\
+      8& 2 & 200 & 100 & Roleta & ELIT & 50\% &80,1\% & 15,36s \\
       \hline
-      2 & 200 & 100 & Tour 1 & ELIT & 50\% &82,6\% & 11,62s \\
+      9& 2 & 200 & 100 & Tour 1 & ELIT & 50\% &82,6\% & 11,62s \\
       \hline
-      2 & 200 & 90 & Tour 1 & ELIT & 90\% &91,6\% & 10,6s \\
+      10& 2 & 200 & 90 & Tour 1 & ELIT & 90\% &91,6\% & 10,6s \\
       \hline
     \end{tabular}
-    \caption{Novas avaliações para SEND + MORE}
+    \caption{Novas avaliações para SEND + MORE = MONEY}
     \label{tab:send}
   \end{table}
 
-  \begin{table}[h]
+  Para o problema SEND + MORE = MONEY o melhor resultado foi o número 6 de acordo
+  com a Tabela \ref{tab:send}. Isto se deve ao fato de possuir a melhor taxa de
+  convergência e tempo de execução inferior aos que possuem convergência semelhante.
+
+  \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
       \hline
-      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      N & Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 25\% &19,2\% & 11,04s \\
+      1 & 1 & 100 & 200 & Roleta & ELIT & 25\% &19,2\% & 11,04s \\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 50\% &21,3\% & 13,84s \\
+      2 & 1 & 100 & 200 & Roleta & ELIT & 50\% &21,3\% & 13,84s \\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 90\% &28,6\% & 12,65s \\
+      3 & 1 & 100 & 200 & Roleta & ELIT & 90\% &28,6\% & 12,65s \\
       \hline
-      1 & 100 & 200 & Tour 1 & ELIT & 50\% &23,01\% & 9,62s \\
+      4 & 1 & 100 & 200 & Tour 1 & ELIT & 50\% &23,01\% & 9,62s \\
       \hline
-      1 & 100 & 200 & Tour 1 & ELIT & 90\% &30,1\% & 10,11s \\
+      5 & 1 & 100 & 200 & Tour 1 & ELIT & 90\% &30,1\% & 10,11s \\
       \hline
-      1 & 150 & 130 & Tour 1 & ELIT & 90\% &43,6\% & 14,16s \\
+      6 & 1 & 150 & 130 & Tour 1 & ELIT & 90\% &43,6\% & 14,16s \\
       \hline
-      2 & 100 & 200 & Roleta & ELIT & 90\% &19,1\% & 10,41s \\
+      7 & 1 & 300 & 30 & Tour 2 & ELIT & 90\% &33,1\% &10,21s \\
       \hline
-      2 & 200 & 90 & Roleta & ELIT & 50\% &24,8\% & 14,55s \\
+      8 & 2 & 200 & 90 & Roleta & ELIT & 50\% &24,8\% & 14,55s \\
       \hline
-      2 & 200 & 90 & Tour 1 & ELIT & 90\% &30,8\% & 10,75s \\
+      9 & 2 & 200 & 90 & Tour 1 & ELIT & 90\% &30,8\% & 10,75s \\
       \hline
-      2 & 150 & 150 & Tour 1 & ELIT & 90\% &29,9\% & 11,79s \\
+      10& 2 & 150 & 150 & Tour 1 & ELIT & 90\% &29,9\% & 11,79s \\
       \hline
     \end{tabular}
-    \caption{Novas avaliações para EAT + THAT}
+    \caption{Novas avaliações para EAT + THAT = APPLE}
     \label{tab:eat}
   \end{table}
 
-  \begin{table}[h]
+  No problema EAT + THAT = APPLE o resultado com maior taxa de convergência foi
+  o sexto de acordo com a Tabela \ref{tab:eat}, porém,  seu tempo de execução
+  foi elevado em comparação aos demais. Entretanto, existe
+  uma difrença de 10\% de convergência para o segundo maior o que justifica a
+  escolha do número 6.
+
+  \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
       \hline
-      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      N & Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 50\% &4,0\% & 14,10s \\
+      1 & 1 & 100 & 200 & Roleta & ELIT & 50\% &4,0\% & 14,10s \\
       \hline
-      1 & 100 & 200 & Tour 2 & ELIT & 50\% &5,2\% & 10,31s \\
+      2&1 & 100 & 200 & Tour 2 & ELIT & 50\% &5,2\% & 10,31s \\
       \hline
-      1 & 240 & 55 & Tour 2 & ELIT & 90\% &11,7\% & 13,95s \\
+      3&1 & 240 & 55 & Tour 2 & ELIT & 90\% &11,7\% & 13,95s \\
       \hline
-      1 & 240 & 55 & Tour 3 & ELIT & 90\% &10,3\% & 12,86s \\
+      4&1 & 240 & 55 & Tour 3 & ELIT & 90\% &10,3\% & 12,86s \\
       \hline
-      1 & 300 & 30 & Tour 2 & ELIT & 90\% &12,1\% & 11,49s \\
+      5&1 & 300 & 30 & Tour 2 & ELIT & 90\% &12,1\% & 11,49s \\
       \hline
-      2 & 100 & 200 & Roleta & ELIT & 25\% &2,4\% & 9,57s \\
+      6&2 & 100 & 200 & Roleta & ELIT & 25\% &2,4\% & 9,57s \\
       \hline
-      2 & 100 & 200 & Roleta & ELIT & 50\% &5,4\% & 9,88s \\
+      7&2 & 100 & 200 & Roleta & ELIT & 50\% &5,4\% & 9,88s \\
       \hline
-      2 & 150 & 150 & Roleta & ELIT & 90\% &6,8\% & 15,15s \\
+      8&2 & 150 & 150 & Roleta & ELIT & 90\% &6,8\% & 15,15s \\
       \hline
-      2 & 100 & 200 & Tour 1 & ELIT & 25\% &3,5\% & 7,66s \\
+      9&2 & 100 & 200 & Tour 1 & ELIT & 25\% &3,5\% & 7,66s \\
       \hline
-      2 & 100 & 200 & Tour 1 & ELIT & 25\% &5,4\% & 7,91s \\
+      10&2 & 100 & 200 & Tour 1 & ELIT & 25\% &5,4\% & 7,91s \\
       \hline
     \end{tabular}
-    \caption{Novas avaliações para CROSS + ROADS}
+    \caption{Novas avaliações para CROSS + ROADS = DANGER}
     \label{tab:cross}
   \end{table}
 
-  \begin{table}[h]
+  Na criptoaritmética de CROSS + ROADS = DANGER o resultado melhor avaliado
+  foi o número 5, Tabela \ref{tab:cross}, uma vez que possui a melhor taxa de
+  convergência e tempo de execução próximo do original.
+
+  \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
       \hline
-      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      N&Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 50\% &43,9\% & 13,60s\\
+      1&1& 100 & 200 & Tour 1 & ELIT & 50\% &45,7\% & 11,19s\\
       \hline
-      1& 100 & 200 & Tour 1 & ELIT & 50\% &45,7\% & 11,19s\\
+      2&1& 255 & 60 & Tour 2 & ELIT & 90\% &77,5\% & 14,32s\\
       \hline
-      1& 255 & 60 & Tour 2 & ELIT & 90\% &77,5\% & 14,32s\\
+      3&1& 300 & 30 & Tour 2 & ELIT & 90\% &71,0\% & 9,88s\\
       \hline
-      2& 100 & 200 & Roleta & ELIT & 50\% &44,3\% & 10,06s\\
+      4&2& 100 & 200 & Roleta & ELIT & 50\% &44,3\% & 10,06s\\
       \hline
-      2& 100 & 200 & Roleta & ELIT & 90\% &57,4\% & 10,32s\\
+      5&2& 100 & 200 & Roleta & ELIT & 90\% &57,4\% & 10,32s\\
       \hline
-      2& 120 & 120 & Roleta & ELIT & 90\% &60,4\% & 8,15s\\
+      6&2& 120 & 120 & Roleta & ELIT & 90\% &60,4\% & 8,15s\\
       \hline
-      2& 100 & 200 & Tour 1 & ELIT & 50\% &45,1\% & 7,79s\\
+      7&2& 100 & 200 & Tour 1 & ELIT & 50\% &45,1\% & 7,79s\\
       \hline
-      2& 100 & 200 & Tour 1 & ELIT & 90\% &58,4\% & 8,42s\\
+      8&2& 100 & 200 & Tour 1 & ELIT & 90\% &58,4\% & 8,42s\\
       \hline
-      2& 200 & 100 & Tour 1 & ELIT & 90\% &67,2\% & 12,06s\\
+      9&2& 200 & 100 & Tour 1 & ELIT & 90\% &67,2\% & 12,06s\\
       \hline
-      2& 200 & 100 & Tour 2 & ELIT & 90\% &73,0\% & 11,44s\\
+      10&2& 200 & 100 & Tour 2 & ELIT & 90\% &73,0\% & 11,44s\\
       \hline
     \end{tabular}
-    \caption{Novas avaliações para COCA + COLA}
+    \caption{Novas avaliações para COCA + COLA = OASIS}
     \label{tab:coca}
   \end{table}
 
-  \begin{table}[h]
+  No problema COCA + COLA = OASIS obteve-se como melhor resultado o número 3,
+  Tabela \ref{tab:coca}. Esta resposta teve a segunda  maior taxa de convergência,
+  mas como seu tempo de execução foi consideravelmente menor para uma diferença
+  de apenas 6,5\% na taxa ela foi escolhida.
+
+  \begin{table}[H]
     \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
       \hline
-      Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
+      N&Av & Pop & Gerações & Sorteio & Sub & Mut. & Conver. & Tempo  \\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 50\% &38,7\% & 14,05s\\
+      1&1 & 100 & 200 & Roleta & ELIT & 70\% &45,7\% & 14,42s\\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 70\% &45,7\% & 14,42s\\
+      2&1 & 100 & 200 & Roleta & ELIT & 90\% &53,5\% & 14,95s\\
       \hline
-      1 & 100 & 200 & Roleta & ELIT & 90\% &53,5\% & 14,95s\\
+      3&1 & 100 & 200 & Tour 1 & ELIT & 50\% &38,0\% & 11,61s\\
       \hline
-      1 & 100 & 200 & Tour 1 & ELIT & 50\% &38,0\% & 11,61s\\
+      4&1 & 240 & 55 & Tour 2 & ELIT & 90\% &76,2\% & 13,37s\\
       \hline
-      1 & 240 & 55 & Tour 2 & ELIT & 90\% &76,2\% & 13,37s\\
+      5&1 & 300 & 30 & Tour 2 & ELIT & 90\% &71,5\% & 12,03s\\
       \hline
-      2 & 100 & 200 & Roleta & ELIT & 25\% &25,4\% & 9,29s\\
+      6&2 & 100 & 200 & Roleta & ELIT & 90\% &53,9\% & 10,22s\\
       \hline
-      2 & 100 & 200 & Roleta & ELIT & 50\% &35,2\% & 10,11s\\
+      7&2 & 100 & 200 & Tour 1 & ELIT & 50\% &36,1\% & 8,04s\\
       \hline
-      2 & 100 & 200 & Roleta & ELIT & 90\% &53,9\% & 10,22s\\
+      8&2 & 100 & 200 & Tour 1 & ELIT & 90\% &49,0\% & 8,57s\\
       \hline
-      2 & 100 & 200 & Tour 1 & ELIT & 25\% &26,7\% & 7,41s\\
+      9&2 & 200 & 100 & Tour 1 & ELIT & 90\% &65,0\% & 12,42s\\
       \hline
-      2 & 100 & 200 & Tour 1 & ELIT & 50\% &36,1\% & 8,04s\\
-      \hline
-      2 & 100 & 200 & Tour 1 & ELIT & 90\% &49,0\% & 8,57s\\
-      \hline
-      2 & 200 & 100 & Tour 1 & ELIT & 90\% &65,0\% & 12,42s\\
-      \hline
-      2 & 200 & 100 & Tour 3 & ELIT & 90\% &65,5\% & 12,36s\\
+      10&2 & 200 & 100 & Tour 3 & ELIT & 90\% &65,5\% & 12,36s\\
       \hline
     \end{tabular}
-    \caption{Novas avaliações para DONALD + GERALD}
+    \caption{Novas avaliações para DONALD + GERALD = ROBERT}
     \label{tab:donald}
   \end{table}
+
+  Na pergunta DONALD + GERALD = ROBERT a resposta selecionada foi a número 4,
+  Tabela \ref{tab:donald}, uma vez que seu indice de convergência foi o maior
+  e o tempo de execução foi próximo dos restantes.
+
+\section{Referências Bibliográficas}
+  \begin{itemize}
+    \item Roteiro do trabalho 1 de criptoaritimética. Profa Dra. Gina Maira Barbosa de Oliveira, 2017-1;
+    \item Apresentações de computação evolutiva. Profa Dra. Gina Maira Barbosa de Oliveira, 2017-1;
+    \item Solving Cryptarithmetic Problems Using Parallel Genetic Algorithm. Reza Abbasian and Masoud Mazloom, 2009.
+  \end{itemize}
+
+
+
+\section{Apêndice}
+  \lstinputlisting[language=c]{ag.c}
 
 \end{document}
