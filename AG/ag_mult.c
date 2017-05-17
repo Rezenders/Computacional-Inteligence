@@ -23,7 +23,7 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
 void setRoulette(int parents[][11], int p_size, double roulette[]);
 void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons);
 
-int av_type = SEND;
+int av_type = CROSS;
 int av_min = 1000000000, av_max = 0;
 unsigned long int roulette_inv = 100000;
 
@@ -43,7 +43,7 @@ int main() {
   int p_index[n_sons];
   int sons[n_sons][11];
 
-  // Numero de execucoes
+  // Numero de execuções
   int n_execucao = 1000;
   int n_zero = 0;
 
@@ -63,7 +63,7 @@ int main() {
       updatePop(p, pop_size, sons, n_sons, ELIT);
       getMinMaxAv(p, pop_size);
     }
-    printf("\n Melhor avalicao na execucao %i foi: %i", ag_n, av_min);
+    printf("\n Melhor avalição na execução %i foi: %i", ag_n, av_min);
 
     if (av_min == 0) {
       n_zero++;
@@ -221,6 +221,10 @@ void crossOverAll(int parents[][11], int p_index[], int sons[][11], int n_sons,
               sons[i + 1], mutate_percent);
   }
 
+  // int mutation_size = n_sons*((double)mutate_percent/100);
+  // for (int m = 0; m < mutation_size; m++) {
+  //   mutation(sons[rand()%80]);
+  // }
 }
 
 void crossOver(int parent1[], int parent2[], int son1[], int son2[],
