@@ -3,3 +3,8 @@ ag
 ~ag
 ./ag
 .ag
+*.zip
+*.aux
+*.log
+*.pdf
+*.toc
