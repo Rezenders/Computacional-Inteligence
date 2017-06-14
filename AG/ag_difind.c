@@ -12,7 +12,7 @@ void getMinMaxAv(int pop[][11], int pop_size);
 void sortRandom(int array[]);
 void sortOrderAv(int array[][11], unsigned int array_size);
 void getAv(int array[]);
-void tour(int parents[][11],int pop_size, int p_index[], int tour_size, int n_sons);
+void tour(int parents[][11],int p_size, int p_index[], int tour_size, int n_sons);
 void crossOverAll(int parents[][11], int p_index[], int sons[][11], int n_sons,
                   int mutate_percent);
 void crossOver(int parent1[], int parent2[], int son1[], int son2[],
@@ -23,7 +23,7 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
 void setRoulette(int parents[][11], int p_size, double roulette[]);
 void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons);
 
-int av_type = CROSS;
+int av_type = DONALD;
 int av_min = 1000000000, av_max = 0;
 unsigned long int roulette_inv = 100000;
 
@@ -32,10 +32,10 @@ int main() {
   srand((unsigned)666);
 
   // PARAMETROS DO AG
-  static int pop_size = 300;
+  static int pop_size = 200;
   double cros_over = 0.8;
   int n_sons = pop_size * cros_over;
-  static int n_ger =30;
+  static int n_ger = 100;
   static int mutate_percent = 90;
 
   // PAIS E FILHOS
@@ -56,7 +56,7 @@ int main() {
     getMinMaxAv(p, pop_size);
 
     for (size_t i = 0; i < n_ger; i++) {
-      tour(p, pop_size, p_index, 2, n_sons);
+      tour(p, pop_size, p_index, 3, n_sons);
       // setRoulette(p, pop_size, roulette);
       // spinRoulette(roulette, pop_size, p_index, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);
@@ -120,60 +120,57 @@ void sortOrderAv(int array[][11], unsigned int array_size) {
 
 void getAv(int array[]) {
   unsigned int aux, sum;
+  unsigned int mult = 1;
   switch (av_type) {
   case SEND:
 
     sum = (array[0] * 1000 + array[1] * 100 + array[2] * 10 + array[3]) +
           (array[4] * 1000 + array[5] * 100 + array[6] * 10 + array[1]);
 
-    aux = (1 + abs(array[7] - sum % 10)) *
-          (1 + abs(array[1] - (sum / 10) % 10)) *
-          (1 + abs(array[2] - (sum / 100) % 10)) *
-          (1 + abs(array[5] - (sum / 1000) % 10)) *
-          (1 + abs(array[4] - (sum / 10000) % 10));
+    aux = (abs((array[7] - sum % 10) * mult)) +
+          (abs((array[1] - (sum / 10) % 10) * mult)) +
+          (abs((array[2] - (sum / 100) % 10) * mult)) +
+          (abs((array[5] - (sum / 1000) % 10) * mult)) +
+          (abs((array[4] - (sum / 10000) % 10) * mult));
 
-    aux = aux - 1;
-    roulette_inv = pow(10, 5) + 1;
+    roulette_inv = 9*5*mult +1;
 
     break;
   case EAT:
     sum = (array[0] * 100 + array[1] * 10 + array[2] * 1) +
           (array[2] * 1000 + array[3] * 100 + array[1] * 10 + array[2] * 1);
 
-    aux = (1 + abs(array[0] - sum % 10)) *
-          (1 + abs(array[5] - (sum / 10) % 10)) *
-          (1 + abs(array[4] - (sum / 100) % 10)) *
-          (1 + abs(array[4] - (sum / 1000) % 10)) *
-          (1 + abs(array[1] - (sum / 10000) % 10));
-    aux = aux - 1;
-    roulette_inv = pow(10, 5) + 1;
-    break;
+    aux = (abs((array[0] - sum % 10) * mult)) +
+          (abs((array[5] - (sum / 10) % 10) * mult)) +
+          (abs((array[4] - (sum / 100) % 10) * mult)) +
+          (abs((array[4] - (sum / 1000) % 10) * mult)) +
+          (abs((array[1] - (sum / 10000) % 10) * mult));
+    roulette_inv = 9*5 +1;
+  break;
   case CROSS:
     sum = (array[0] * 10000 + array[1] * 1000 + array[2] * 100 + array[3] * 10 +
            array[3] * 1) +
           (array[1] * 10000 + array[2] * 1000 + array[4] * 100 + array[5] * 10 +
            array[3] * 1);
 
-    aux = (1 + abs(array[1] - sum % 10)) *
-          (1 + abs(array[8] - (sum / 10) % 10)) *
-          (1 + abs(array[7] - (sum / 100) % 10)) *
-          (1 + abs(array[6] - (sum / 1000) % 10)) *
-          (1 + abs(array[4] - (sum / 10000) % 10)) *
-          (1 + abs(array[5] - (sum / 100000) % 10));
-    aux = aux - 1;
-    roulette_inv = pow(10, 6) + 1;
+    aux = (abs((array[1] - sum % 10) * mult)) +
+          (abs((array[8] - (sum / 10) % 10) * mult)) +
+          (abs((array[7] - (sum / 100) % 10) * mult)) +
+          (abs((array[6] - (sum / 1000) % 10) * mult)) +
+          (abs((array[4] - (sum / 10000) % 10) * mult)) +
+          (abs((array[5] - (sum / 100000) % 10) * mult));
+    roulette_inv = 9*6 + 1;
     break;
   case COCA:
     sum = (array[0] * 1000 + array[1] * 100 + array[0] * 10 + array[2] * 1) +
           (array[0] * 1000 + array[1] * 100 + array[3] * 10 + array[2] * 1);
 
-    aux = (1 + abs(array[4] - sum % 10)) *
-          (1 + abs(array[5] - (sum / 10) % 10)) *
-          (1 + abs(array[4] - (sum / 100) % 10)) *
-          (1 + abs(array[2] - (sum / 1000) % 10)) *
-          (1 + abs(array[1] - (sum / 10000) % 10));
-    aux = aux - 1;
-    roulette_inv = pow(10, 5) + 1;
+    aux = (abs((array[4] - sum % 10) * mult)) +
+          (abs((array[5] - (sum / 10) % 10) * mult)) +
+          (abs((array[4] - (sum / 100) % 10) * mult)) +
+          (abs((array[2] - (sum / 1000) % 10) * mult)) +
+          (abs((array[1] - (sum / 10000) % 10) * mult));
+    roulette_inv = 9*5 + 1;
     break;
   case DONALD:
     sum = (array[0] * 100000 + array[1] * 10000 + array[2] * 1000 +
@@ -181,27 +178,26 @@ void getAv(int array[]) {
           (array[5] * 100000 + array[6] * 10000 + array[7] * 1000 +
            array[3] * 100 + array[4] * 10 + array[0] * 1);
 
-    aux = (1 + abs(array[9] - sum % 10)) *
-          (1 + abs(array[7] - (sum / 10) % 10)) *
-          (1 + abs(array[6] - (sum / 100) % 10)) *
-          (1 + abs(array[8] - (sum / 1000) % 10)) *
-          (1 + abs(array[1] - (sum / 10000) % 10)) *
-          (1 + abs(array[7] - (sum / 100000) % 10));
-    aux = aux - 1;
-    roulette_inv = pow(10, 6) + 1;
+    aux = (abs((array[9] - sum % 10) * mult)) +
+          (abs((array[7] - (sum / 10) % 10) * mult)) +
+          (abs((array[6] - (sum / 100) % 10) * mult)) +
+          (abs((array[8] - (sum / 1000) % 10) * mult)) +
+          (abs((array[1] - (sum / 10000) % 10) * mult)) +
+          (abs((array[7] - (sum / 100000) % 10) * mult));
+    roulette_inv = 9*6 + 1;
     break;
   }
   array[10] = aux;
 }
 
-void tour(int parents[][11],int pop_size, int p_index[], int tour_size, int n_sons) {
+void tour(int parents[][11],int p_size, int p_index[], int tour_size, int n_sons) {
 
   for (int i = 0; i < n_sons; i++) {
     int best_av = 1000000000;
     int best_index = -1;
 
     for (int n = 0; n < tour_size; n++) {
-      int aux_i = rand() % pop_size;
+      int aux_i = rand() % p_size;
       int aux_av = parents[aux_i][10];
 
       if (aux_av < best_av) {
@@ -283,7 +279,7 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
     break;
   case ELIT:
     sortOrderAv(parents, p_size);
-    memcpy(parents[p_size-n_sons], sons, sizeof(int) * n_sons * 11);
+    memcpy(parents[p_size - n_sons], sons, sizeof(int) * n_sons * 11);
     break;
   default:
     break;

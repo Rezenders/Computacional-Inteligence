@@ -11,7 +11,7 @@ void getMinMaxAv(int pop[][11], int pop_size);
 void sortRandom(int array[]);
 void sortOrderAv(int array[][11], unsigned int array_size);
 void getAv(int array[]);
-void tour(int parents[][11], int p_index[], int tour_size, int n_sons);
+void tour(int parents[][11],int p_size, int p_index[], int tour_size, int n_sons);
 void crossOverAll(int parents[][11], int p_index[], int sons[][11], int n_sons,
                   int mutate_percent);
 void crossOver(int parent1[], int parent2[], int son1[], int son2[],
@@ -22,7 +22,7 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
 void setRoulette(int parents[][11], int p_size, double roulette[]);
 void spinRoulette(double roulette[], int p_size, int p_index[], int n_sons);
 
-int av_type = CROSS;
+int av_type = SEND;
 int av_min = 1000000000, av_max = 0;
 long int roulette_inv = 100000;
 
@@ -35,14 +35,14 @@ int main() {
   double cros_over = 0.8;
   int n_sons = pop_size*cros_over;
   static int n_ger = 200;
-  static int mutate_percent = 25;
+  static int mutate_percent = 20;
 
   // PAIS E FILHOS
   int p[pop_size][11];
   int p_index[n_sons];
   int sons[n_sons][11];
 
-  // Numero de execuções
+  // Numero de execucoes
   int n_execucao = 1000;
   int n_zero = 0;
 
@@ -62,7 +62,7 @@ int main() {
       updatePop(p, pop_size, sons, n_sons, ELIT);
       getMinMaxAv(p, pop_size);
     }
-    printf("\n Melhor avalição na execução %i foi: %i", ag_n, av_min);
+    printf("\n Melhor avalicao na execucao %i foi: %i", ag_n, av_min);
 
     if (av_min == 0) {
       n_zero++;
@@ -164,14 +164,14 @@ void getAv(int array[]) {
   array[10] = abs(aux);
 }
 
-void tour(int parents[][11], int p_index[], int tour_size, int n_sons) {
+void tour(int parents[][11], int p_size, int p_index[], int tour_size, int n_sons) {
 
   for (int i = 0; i < n_sons; i++) {
     int best_av = 1000000000;
     int best_index = -1;
 
     for (int n = 0; n < tour_size; n++) {
-      int aux_i = rand() % 100;
+      int aux_i = rand() % p_size;
       int aux_av = parents[aux_i][10];
 
       if (aux_av < best_av) {
@@ -254,7 +254,7 @@ void updatePop(int parents[][11], int p_size, int sons[][11], int n_sons,
     break;
   case ELIT:
     sortOrderAv(parents, p_size);
-    memcpy(parents[20], sons, sizeof(int) * n_sons * 11);
+    memcpy(parents[p_size - n_sons], sons, sizeof(int) * n_sons * 11);
     break;
   default:
     break;
