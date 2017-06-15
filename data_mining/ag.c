@@ -20,7 +20,7 @@ void geraPop(struct regra r[], int n_regras);
 void geraAv(struct regra r[], int n_regras, int pacientes[][35], int n_pacientes, int classe);
 void tourEst(struct regra r[], int n_regras,  int p_index[], int n_sons, int tour_size);
 void crossOver(struct regra r[], struct regra r_sons[], int p_index[], int n_sons, double mutate_percent);
-void updatePop();
+void updatePop(struct regra r[], struct regra r_sons[], int n_regras, int n_sons);
 void printRegras(struct regra r[], int n_regras);
 
 int main(){
@@ -29,7 +29,7 @@ int main(){
   double cross_over = 1;
   int n_sons = cross_over*n_regras;
   double mutate_percent = 0.3;
-  int n_ger = 1;
+  int n_ger = 50;
 
   //Pacientes de treinamento e teste
   int p_tre[239][35];
@@ -43,18 +43,18 @@ int main(){
 
   srand(999);
 
-  for(int classe=1; classe<=1; classe++){
+  for(int classe=1; classe<=6; classe++){
     geraPop(r, n_regras);
-    // printRegras(r, n_regras);
     geraAv(r, n_regras, p_tre, 239, classe);
 
     for (size_t geracao = 0; geracao <n_ger; geracao++) {
       tourEst(r, n_regras, p_index, n_sons, 3);
       crossOver(r, r_sons, p_index, n_sons, mutate_percent);
-      quickSort(r, 0, n_regras-1);
-      printRegras(r, n_regras);
+      geraAv(r_sons, n_sons, p_tre, 239, classe);
+      updatePop(r, r_sons, n_regras, n_sons);
     }
-
+    printf("Classe numero %d \n",classe);
+    printRegras(r, n_regras);
   }
 }
 
@@ -239,6 +239,15 @@ void crossOver(struct regra r[], struct regra r_sons[], int p_index[], int n_son
   //   printf("%d ",r_sons[1].atributos[i]);
   // }
   // printf("\n");
+}
+
+void updatePop(struct regra r[], struct regra r_sons[], int n_regras, int n_sons){
+  struct regra aux[n_regras + n_sons];
+  memcpy(aux,r,sizeof(struct regra)*n_regras);
+  memcpy(&aux[50],r_sons,sizeof(struct regra)*n_sons);
+
+  quickSort(aux,0, n_regras+n_sons-1);
+  memcpy(r, aux, sizeof(struct regra)*n_regras);
 }
 
 void printRegras(struct regra r[], int n_regras){
