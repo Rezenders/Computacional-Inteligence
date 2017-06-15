@@ -12,12 +12,15 @@ struct regra{
 };
 
 void readFile(int p_tre[][35], int tre_size, int p_tst[][35], int tst_size);
+void quickSort(struct regra r[], int low, int high);
+int partition (struct regra r[], int low, int high);
+void swap(struct regra *a, struct regra *b);
 
 void geraPop(struct regra r[], int n_regras);
 void geraAv(struct regra r[], int n_regras, int pacientes[][35], int n_pacientes, int classe);
 void tourEst(struct regra r[], int n_regras,  int p_index[], int n_sons, int tour_size);
 void crossOver(struct regra r[], struct regra r_sons[], int p_index[], int n_sons, double mutate_percent);
-void atualizaPop();
+void updatePop();
 void printRegras(struct regra r[], int n_regras);
 
 int main(){
@@ -48,6 +51,8 @@ int main(){
     for (size_t geracao = 0; geracao <n_ger; geracao++) {
       tourEst(r, n_regras, p_index, n_sons, 3);
       crossOver(r, r_sons, p_index, n_sons, mutate_percent);
+      quickSort(r, 0, n_regras-1);
+      printRegras(r, n_regras);
     }
 
   }
@@ -238,10 +243,11 @@ void crossOver(struct regra r[], struct regra r_sons[], int p_index[], int n_son
 
 void printRegras(struct regra r[], int n_regras){
   for (size_t i = 0; i < n_regras; i++) {
-    for (size_t j = 0; j < 34; j++) {
-      printf("%d ",r[i].operadores[j]);
+    // for (size_t j = 0; j < 34; j++) {
+      // printf("%d ",r[i].operadores[j]);
       // printf("%f ",r[i].pesos[j]);
-    }
+    // }
+    printf("%f ",r[i].av);
     printf("\n");
   }
 }
@@ -274,4 +280,45 @@ void readFile(int p_tre[][35], int tre_size, int p_tst[][35], int tst_size){
   //   }
   // }
   fclose(fp);
+}
+
+void quickSort(struct regra r[], int low, int high){
+    if (low < high)
+    {
+        /* pi is partitioning index, arr[p] is now
+           at right place */
+        int pi = partition(r, low, high);
+
+        // Separately sort elements before
+        // partition and after partition
+        quickSort(r, low, pi - 1);
+        quickSort(r, pi + 1, high);
+    }
+}
+
+int partition (struct regra r[], int low, int high){
+  // int pivot = arr[high];    // pivot
+  double pivot = r[high].av;    // pivot
+
+  int i = (low - 1);  // Index of smaller element
+
+  for (int j = low; j <= high- 1; j++)
+  {
+    // If current element is smaller than or
+    // equal to pivot
+    // printf("Pivot: %f av:%f \n", pivot, r[j].av);
+    if (r[j].av >= pivot)
+    {
+      i++;    // increment index of smaller element
+      swap(&r[i], &r[j]);
+    }
+  }
+  swap(&r[i + 1], &r[high]);
+  return (i + 1);
+}
+
+void swap(struct regra *a, struct regra *b){
+  struct regra t = *a;
+  *a = *b;
+  *b = t;
 }
