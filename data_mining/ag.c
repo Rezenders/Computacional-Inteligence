@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include <stdbool.h>
+#include <string.h>
 
 struct regra{
   double pesos[34];
@@ -15,7 +16,7 @@ void readFile(int p_tre[][35], int tre_size, int p_tst[][35], int tst_size);
 void geraPop(struct regra r[], int n_regras);
 void geraAv(struct regra r[], int n_regras, int pacientes[][35], int n_pacientes, int classe);
 void tourEst(struct regra r[], int n_regras,  int p_index[], int n_sons, int tour_size);
-void crossOver();
+void crossOver(struct regra r[], struct regra r_sons[], int p_index[], int n_sons, double mutate_percent);
 void atualizaPop();
 void printRegras(struct regra r[], int n_regras);
 
@@ -25,7 +26,7 @@ int main(){
   double cross_over = 1;
   int n_sons = cross_over*n_regras;
   double mutate_percent = 0.3;
-  int n_ger = 50;
+  int n_ger = 1;
 
   //Pacientes de treinamento e teste
   int p_tre[239][35];
@@ -39,13 +40,14 @@ int main(){
 
   srand(999);
 
-  for(int classe=1; classe<1; classe++){
+  for(int classe=1; classe<=1; classe++){
     geraPop(r, n_regras);
     // printRegras(r, n_regras);
     geraAv(r, n_regras, p_tre, 239, classe);
 
-    for (size_t geracao = 0; geracao < n_ger; geracao++) {
+    for (size_t geracao = 0; geracao <n_ger; geracao++) {
       tourEst(r, n_regras, p_index, n_sons, 3);
+      crossOver(r, r_sons, p_index, n_sons, mutate_percent);
     }
 
   }
@@ -54,7 +56,7 @@ int main(){
 void geraPop(struct regra r[], int n_regras){
   for(int i=0; i < n_regras; i++){
     for(int j=0; j<34; j++){
-        r[i].pesos[j] = (double)(rand()%1001)/1000;
+        r[i].pesos[j] =(rand()%1001)/1000.0;
         r[i].atributos[j] = rand()%4;
         r[i].operadores[j] = rand()%4;
     }
@@ -137,11 +139,101 @@ void tourEst(struct regra r[], int n_regras,  int p_index[], int n_sons, int tou
     }else{
       p_index[i] = index_tour[0];
     }
+
+    for (size_t m = 0; m < i; m++) {
+      if(p_index[i] == p_index[m]){
+        --i;
+        break;
+      }
+    }
+
   }
-  printf("\n");
-  for (size_t i = 0; i < n_sons; i++) {
-    printf("%d\n", p_index[i]);
+  // printf("\n");
+  // for (size_t i = 0; i < n_sons; i++) {
+  //   printf("%d\n", p_index[i]);
+  // }
+}
+
+void crossOver(struct regra r[], struct regra r_sons[], int p_index[], int n_sons, double mutate_percent){
+  int n_points =2;
+  int points[n_points];
+  for (size_t i = 0; i < n_sons-1; i+=2) {
+
+    for (size_t j = 0; j < n_points; j++) {
+      points[j] = rand()%33;
+      for (size_t w = 0; w < j; w++) {
+        if(points[j]==points[w]){
+          --j;
+          break;
+        }
+      }
+    }
+
+    r_sons[i] = r[i];
+    r_sons[i+1] = r[i+1];
+    for (size_t m = 0; m < n_points; m++) {
+      struct regra aux;
+      aux = r_sons[i];
+      memcpy(r_sons[i].pesos, r_sons[i+1].pesos, sizeof(double) *points[m]);
+      memcpy(r_sons[i].atributos, r_sons[i+1].atributos, sizeof(int) *points[m]);
+      memcpy(r_sons[i].operadores, r_sons[i+1].operadores, sizeof(int) *points[m]);
+
+      memcpy(r_sons[i+1].pesos, aux.pesos, sizeof(double) *points[m]);
+      memcpy(r_sons[i+1].atributos, aux.atributos, sizeof(int) *points[m]);
+      memcpy(r_sons[i+1].operadores, aux.operadores, sizeof(int) *points[m]);
+
+    }
+    if((rand()%1001/1000.0)<=0.3){
+      r_sons[i].pesos[(rand()%34)] = (rand()%1001/1000.0);
+    }
+    if((rand()%1001/1000.0)<=0.3){
+      int index = (rand()%34);
+      if(index!=10 && 33){
+        r_sons[i].atributos[index] = (rand()%4);
+      }else if(index == 10){
+        r_sons[i].atributos[index] = (rand()%2);
+      }else if(index == 33){
+        r_sons[i].atributos[index] = (rand()%71);
+      }
+    }
+    if((rand()%1001/1000.0)<=0.3){
+      r_sons[i].operadores[(rand()%34)] = (rand()%4);
+    }
+    if((rand()%1001/1000.0)<=0.3){
+      r_sons[i+1].pesos[(rand()%34)] = (rand()%1001/1000.0);
+    }
+    if((rand()%1001/1000.0)<=0.3){
+      int index = (rand()%34);
+      if(index!=10 && 33){
+        r_sons[i+1].atributos[index] = (rand()%4);
+      }else if(index == 10){
+        r_sons[i+1].atributos[index] = (rand()%2);
+      }else if(index == 33){
+        r_sons[i+1].atributos[index] = (rand()%71);
+      }
+    }
+    if((rand()%1001/1000.0)<=0.3){
+      r_sons[i+1].operadores[(rand()%34)] = (rand()%4);
+    }
+
   }
+  // printf("\npai1: ");
+  // for (size_t i = 0; i < 34; i++) {
+  //   printf("%d ",r[0].atributos[i]);
+  // }
+  // printf("\npai2: ");
+  // for (size_t i = 0; i < 34; i++) {
+  //   printf("%d ",r[1].atributos[i]);
+  // }
+  // printf("\nfil1: ");
+  // for (size_t i = 0; i < 34; i++) {
+  //   printf("%d ",r_sons[0].atributos[i]);
+  // }
+  // printf("\nfil2: ");
+  // for (size_t i = 0; i < 34; i++) {
+  //   printf("%d ",r_sons[1].atributos[i]);
+  // }
+  // printf("\n");
 }
 
 void printRegras(struct regra r[], int n_regras){
