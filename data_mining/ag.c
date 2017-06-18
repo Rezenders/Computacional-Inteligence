@@ -9,7 +9,43 @@ struct rule {
   int operators[34]; // =, !=, <, >=
   double sp, se;
   double av;
+  double tst;
 };
+
+const char *diseases[34] = {"erythema",
+                            "scaling",
+                            "definite borders",
+                            "itching",
+                            "koebner phenomenon ",
+                            "polygonal papules ",
+                            "follicular papules ",
+                            "oral mucosal involvement ",
+                            "knee and elbow involvement ",
+                            "scalp involvement",
+                            "family history",
+                            "melanin incontinence",
+                            "eosinophils in the infiltrate",
+                            "PNL infiltrate",
+                            "fibrosis of the papillary dermis",
+                            "exocytosis",
+                            "acanthosis",
+                            "hyperkeratosis",
+                            "parakeratosis",
+                            "clubbing of the rete ridges",
+                            "elongation of the rete ridges",
+                            "thinning of the suprapapillary epidermis",
+                            "spongiform pustule",
+                            "munro microabcess",
+                            "focal hypergranulosis",
+                            "disappearance of the granular layer",
+                            "vacuolisation and damage of basal layer",
+                            "spongiosis",
+                            "saw-tooth appearance of retes",
+                            "follicular horn plug",
+                            "perifollicular parakeratosis",
+                            "inflammatory monoluclear inflitrate",
+                            "band-like infiltrate",
+                            "Age"};
 
 void readFile(int p_tre[][35], int tre_size, int p_tst[][35], int tst_size);
 void quickSort(struct rule r[], int low, int high);
@@ -19,14 +55,17 @@ void swap(struct rule *a, struct rule *b);
 void genPop(struct rule r[], int n_rules);
 void getAv(struct rule r[], int n_rules, int patients[][35], int n_patients,
            int class);
+void getTst(struct rule r[], int n_rules, int patients[][35], int n_patients,
+            int class);
 void tourEst(struct rule r[], int n_rules, int p_index[], int n_sons,
              int tour_size);
 void crossOver(struct rule r[], struct rule r_sons[], int p_index[], int n_sons,
                double mutate_percent);
 void updatePop(struct rule r[], struct rule r_sons[], int n_rules, int n_sons);
-void printRule(struct rule r[], int n_rules, int class);
+void printRule(struct rule r, int class);
 void printRulesMembers(struct rule r[], int n_rules);
 void printBestRuleAv(struct rule r[], int n_rules);
+struct rule getBest(struct rule r[], int n_rules);
 
 double max_weight = 0.3;
 
@@ -37,6 +76,7 @@ int main() {
   int n_sons = cross_over * n_rules;
   double mutate_percent = 0.3;
   int n_ger = 50;
+  int n_exe = 10;
 
   // patients de treinamento e teste
   int p_tre[239][35];
@@ -48,21 +88,31 @@ int main() {
   struct rule r_sons[n_sons];
   int p_index[n_sons];
 
-  srand(999);
+  srand(666);
 
   for (int class = 1; class <= 6; class ++) {
-    genPop(r, n_rules);
-    getAv(r, n_rules, p_tre, 239, class);
+    struct rule best;
+    best.av = 0;
+    for (int exec = 0; exec < n_exe; exec++) {
+      genPop(r, n_rules);
+      getAv(r, n_rules, p_tre, 239, class);
 
-    for (size_t geracao = 0; geracao < n_ger; geracao++) {
-      tourEst(r, n_rules, p_index, n_sons, 3);
-      crossOver(r, r_sons, p_index, n_sons, mutate_percent);
-      getAv(r_sons, n_sons, p_tre, 239, class);
-      updatePop(r, r_sons, n_rules, n_sons);
+      for (size_t geracao = 0; geracao < n_ger; geracao++) {
+        tourEst(r, n_rules, p_index, n_sons, 3);
+        crossOver(r, r_sons, p_index, n_sons, mutate_percent);
+        getAv(r_sons, n_sons, p_tre, 239, class);
+        updatePop(r, r_sons, n_rules, n_sons);
+      }
+      getTst(r, n_rules, p_tst, 119, class);
+      struct rule aux = getBest(r, n_rules);
+      if (aux.av > best.av) {
+        best = aux;
+      }
     }
+
     // printf("class numero %d \n",class);
     // printBestRuleAv(r, n_rules);
-    printRule(r, n_rules, class);
+    printRule(best, class);
   }
 }
 
@@ -120,9 +170,62 @@ void getAv(struct rule r[], int n_rules, int patients[][35], int n_patients,
     }
     // printf("tp: %d, fp: %d, tn: %d, fn: %d \n",tp,fp,tn,fn);
 
+    // r[i].sp = (double)tp / (tp + fp + .1);
+    // r[i].se = (double)tn / (tn + fn + .1);
     r[i].sp = (double)tp / (tp + fn + .1);
     r[i].se = (double)tn / (tn + fp + .1);
     r[i].av = r[i].sp * r[i].se;
+    // printf("Av: %f \n",r[i].av);
+  }
+  // printf("Avaliando o conjunto de regras\n");
+}
+void getTst(struct rule r[], int n_rules, int patients[][35], int n_patients,
+            int class) {
+
+  for (size_t i = 0; i < n_rules; i++) {
+    int tp = 0, tn = 0, fp = 0, fn = 0;
+    for (size_t j = 0; j < n_patients; j++) {
+      bool is_class = true;
+
+      for (size_t w = 0; w < 34; w++) {
+        if (r[i].weights[w] < max_weight) {
+          switch (r[i].operators[w]) {
+          case 0:
+            is_class &= (patients[j][w] == r[i].att[w]);
+            break;
+          case 1:
+            is_class &= (patients[j][w] != r[i].att[w]);
+            break;
+          case 2:
+            is_class &= (patients[j][w] < r[i].att[w]);
+            break;
+          case 3:
+            is_class &= (patients[j][w] >= r[i].att[w]);
+            break;
+          }
+
+          if (!is_class)
+            break;
+        }
+      }
+
+      if (patients[j][34] == class && is_class) {
+        tp++;
+      } else if (patients[j][34] != class && is_class) {
+        fp++;
+      } else if (patients[j][34] != class && !is_class) {
+        tn++;
+      } else if ((patients[j][34] == class) && !is_class) {
+        fn++;
+      }
+    }
+    // printf("tp: %d, fp: %d, tn: %d, fn: %d \n",tp,fp,tn,fn);
+
+    // r[i].sp = (double)tp / (tp + fp + .1);
+    // r[i].se = (double)tn / (tn + fn + .1);
+    r[i].sp = (double)tp / (tp + fn + .1);
+    r[i].se = (double)tn / (tn + fp + .1);
+    r[i].tst = r[i].sp * r[i].se;
     // printf("Av: %f \n",r[i].av);
   }
   // printf("Avaliando o conjunto de regras\n");
@@ -261,13 +364,13 @@ void updatePop(struct rule r[], struct rule r_sons[], int n_rules, int n_sons) {
   memcpy(r, aux, sizeof(struct rule) * n_rules);
 }
 
-void printRule(struct rule r[], int n_rules, int class) {
-  quickSort(r, 0, n_rules - 1);
+void printRule(struct rule r, int class) {
+  printf("\nTraining av is %f Test av is %f \n", r.av, r.tst);
   printf("The resulting rule for class %d is: \n", class);
   for (size_t i = 0; i < 34; i++) {
-    if (r[0].weights[i] < max_weight) {
-      printf("att: %zu ", i);
-      switch (r[0].operators[i]) {
+    if (r.weights[i] < max_weight) {
+      printf("att: %s ", diseases[i]);
+      switch (r.operators[i]) {
       case 0:
         printf("== ");
         break;
@@ -281,7 +384,7 @@ void printRule(struct rule r[], int n_rules, int class) {
         printf(">= ");
         break;
       }
-      printf("%d \n", r[0].att[i]);
+      printf("%d \n", r.att[i]);
     }
   }
 }
@@ -297,9 +400,18 @@ void printRulesMembers(struct rule r[], int n_rules) {
   }
 }
 
+struct rule getBest(struct rule r[], int n_rules) {
+  struct rule aux = r[0];
+  for (size_t i = 1; i < n_rules; i++) {
+    if (r[i].av > aux.av) {
+      aux = r[i];
+    }
+  }
+  return aux;
+}
 void printBestRuleAv(struct rule r[], int n_rules) {
-  quickSort(r, 0, n_rules - 1);
-  printf("Best Av: %f\n", r[0].av);
+  struct rule best = getBest(r, n_rules);
+  printf("Best Av: %f\n", best.av);
 }
 
 void readFile(int p_tre[][35], int tre_size, int p_tst[][35], int tst_size) {
