@@ -67,7 +67,7 @@ void printRulesMembers(struct rule r[], int n_rules);
 void printBestRuleAv(struct rule r[], int n_rules);
 struct rule getBest(struct rule r[], int n_rules);
 
-double max_weight = 0.3;
+double max_weight = 0.2;
 
 int main() {
   // PARAMETROS DO AG
@@ -92,6 +92,8 @@ int main() {
 
   for (int class = 1; class <= 6; class ++) {
     struct rule best;
+    double mean_av =0;
+    double mean_test =0;
     best.av = 0;
     for (int exec = 0; exec < n_exe; exec++) {
       genPop(r, n_rules);
@@ -105,14 +107,19 @@ int main() {
       }
       getTst(r, n_rules, p_tst, 119, class);
       struct rule aux = getBest(r, n_rules);
+      mean_av += aux.av;
+      mean_test += aux.tst;
+      printRule(aux, class);
       if (aux.av > best.av) {
         best = aux;
       }
     }
+    printf("Classe %d --- Média Av: %f Média test %f \n",class, mean_av/n_exe, mean_test/n_exe);
+    printf("\n\n\n");
 
     // printf("class numero %d \n",class);
     // printBestRuleAv(r, n_rules);
-    printRule(best, class);
+    // printRule(best, class);
   }
 }
 

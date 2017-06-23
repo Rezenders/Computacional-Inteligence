@@ -1,23 +1,20 @@
 \begin{thebibliography}{}
 
-\bibitem[Mogul and Borg 1991]{002}
-Mogul, J.~C. and Borg, A. (1991).
-\newblock The effect of context switches on cache performance.
-\newblock {\em SIGPLAN Not.}, 26:75--84.
+\bibitem[Clay R. S. Miranda ;~OLIVEIRA 2003]{002}
+Clay R. S. Miranda ;~OLIVEIRA, G. M. B. ;~SANTOS, J.~B. (2003).
+\newblock Algoritmos genéticos aplicados em data mining para obtenção de
+  regras simples e precisas.
+\newblock {\em SBAI2003: Simpósio Brasileiro de Automação Inteligente}.
 
-\bibitem[Montgomery 2005]{004}
-Montgomery, D.~C. (2005).
-\newblock {\em Design and Analysis of Experiments}.
-\newblock John Wiley, 3 edition.
+\bibitem[Fidelis M.~V. and Freitas 2000]{003}
+Fidelis M.~V., L. H.~S. and Freitas, A.~A. (2000).
+\newblock Discovering comprehensible classification rules with a genetic
+  algorithm.
+\newblock {\em Proc. Congress on Evolutionary Computation}, pages 805--810.
 
-\bibitem[Moore 2000]{003}
-Moore, G.~E. (2000).
-\newblock Readings in computer architecture.
-\newblock chapter Cramming more components onto integrated circuits, pages
-  56--59. Morgan Kaufmann Publishers Inc., San Francisco, CA, USA.
-
-\bibitem[Ousterhout and K 1990]{001}
-Ousterhout, J.~K. and K, J. (1990).
-\newblock Why aren't operating systems getting faster as fast as hardware?
+\bibitem[OLIVEIRA 2017]{001}
+OLIVEIRA, G. M.~B. (2017).
+\newblock Apresentação em sala de aula - algoritmos genéticos aplicados em
+  data mining para ontenção de regras de classificação.
 
 \end{thebibliography}

@@ -10,16 +10,18 @@
 %\usepackage[dvips]{graphicx}
 %\usepackage[pdftex]{color,graphicx}
 \usepackage{multicol}
+\usepackage{multirow}
 \usepackage{verbatim}
 \usepackage{array}
 \usepackage{amssymb,amsmath}
 \usepackage[brazilian]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{tabularx}
 
 \sloppy
 
-\title{2o Trabalho de Inteligência Computacional - Data Mining}
+\title{2$^o$ Trabalho de Inteligência Computacional - Data Mining}
 
 \author{Autor: Gustavo Rezende Silva,\\ Orientador:Gina Maira Barbosa
 de Oliveira}
@@ -57,7 +59,7 @@ Esta sessão é destinada à introdução e motivação da pesquisa, cujo objeti
 
 Com o intuito de gerar regras para a base dermatológica citada na sec.
 \ref{sec:intro} foi desenvolvido um algoritmo genético seguindo o artigo de
-Fidelis et al.(2000) e Miranda et al.(2003). Nestes trabalhos o indivíduo é uma
+Fidelis \textit{et al.}(2000) e Miranda \textit{et al.}(2003). Nestes trabalhos o indivíduo é uma
 abstração da regra de classificação de uma classe específica da doença
 \textit{erythemato-squamous}, ou seja, o que define se um paciente é
 pré-diagnosticado com uma das enfermidades classificadas.
@@ -87,26 +89,170 @@ Para treinar o algoritmo e gerar as regras foi utilizado $2/3$ da base, em segui
 após as regras serem geradas as mesmas foram testadas utilizando o $1/3$ restante
 dos dados.
 
-\section{Contribuição do Trabalho}
-\label{sec:contrib}
+Outro aspecto importante é o método de avaliação adotado, neste trabalho
+para atribuir uma nota ao indivíduo foi utilizada a equação \ref{eq:av}.
 
-Contribuições da sua pesquisa sobre o tema abordado.
+\begin{equation} \label{eq:se}
+  S_e = \frac{T_p}{T_p +F_n}
+\end{equation}
 
-\section{Estado atual do Trabalho}
-\label{sec:estado_atual}
+\begin{equation} \label{eq:sp}
+  S_e = \frac{T_n}{T_n +F_p}
+\end{equation}
 
-Apresente a situação atual do andamento do desenvolvimento do trabalho. Caso haja necessidade, apresente detalhes sobre a metodologia para desenvolvimento do trabalho, incluindo materiais e métodos, descrição de ambiente e experimentos, etc. É facultada a apresentação do cronograma de desenvolvimento do trabalho.
+\begin{equation} \label{eq:av}
+  Av = S_e * S_p
+\end{equation}
 
-\section{Análise de Resultados}
-\label{sec:result}
+Onde:\newline
+\begin{itemize}
+    \item $T_p$ - Verdadeiros positivos\newline
+    \item $T_n$ - Verdadeiros negativos\newline
+    \item $F_p$ - Falsos positivos\newline
+    \item $F_n$ - Falsos negativos\newline
 
-Apresentação de resultados preliminares ou finais do trabalho de pesquisa.
+\end{itemize}
 
-\section{Trabalhos Relacionados}
-\label{sec:trabalhos_relacionados}
+\section{Análise dos Resultados}
+\label{sec:resultados}
 
-Trabalhos relacionados, ilustrando a que ponto está o estado da arte junto à comunidade acadêmica, com pesquisas relacionadas à sua.
+O algoritmo genético desenvolvido para mineração de dados foi executado 10 vezes
+para cada classe da doença, em seguida o melhor resultado de cada classe foi
+escolhido e estes estão representados na tabela \ref{tab:etapa1}.
 
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|l|c|c|}
+    \hline
+    Classe & \multicolumn{1}{c|}{Regras}  & Fitness & Fitness\\
+    das Doenças &  & Treinamento & Teste\\
+    \hline
+    \multirow{2}{*}{1} & thinning of the suprapapillary epidermis >= 1 & 0.929820 & 0.996290 \\
+    & focal hypergranulosis < 3 & &\\
+    \hline
+    \multirow{6}{*}{2} & follicular papules  = 0 & 0.829799 & 0.765162\\
+    & fibrosis of the papillary dermis < 1 & &\\
+    & exocytosis != 0 & &\\
+    & clubbing of the rete ridges < 1 & &\\
+    & vacuolisation and damage of basal layer != 3 & &\\
+    & band-like infiltrate < 1 & &\\
+    \hline
+    \multirow{2}{*}{3} & elongation of the rete ridges = 0 & 0.992163 &0.994803\\
+    & band-like infiltrate >= 2 & &\\
+    \hline
+    \multirow{5}{*}{4} & family history != 1 & 0.811603 & 0.814022 \\
+    & eosinophils in the infiltrate < 1 & &\\
+    & elongation of the rete ridges == 0 & &\\
+    & saw-tooth appearance of retes < 2 & &\\
+    & follicular horn plug != 2 & &\\
+    \hline
+    \multirow{6}{*}{5} & koebner phenomenon  == 0 & 0.996662 & 0.991431 \\
+    & oral mucosal involvement  != 1 & &\\
+    & knee and elbow involvement  < 3 & &\\
+    & PNL infiltrate != 2 & &\\
+    & fibrosis of the papillary dermis != 0 & &\\
+    & band-like infiltrate != 3 & &\\
+    \hline
+    \multirow{2}{*}{6} & follicular papules  >= 1 & 0.991299 & 0.986765 \\
+    & perifollicular parakeratosis != 0 & &\\
+    \hline
+  \end{tabular}
+  \caption{Resultados do data mining}
+  \label{tab:etapa1}
+\end{table}
+
+Para escolher o melhor resultado foi levado em consideração a avaliação de
+treinamento e teste, além do número de condições resultantes. Uma vez que uma
+regra com muitas condições não representa o problema de forma genérica, apenas
+aquele conjunto de dados específicos.
+
+Com a intenção de se ter uma ideia geral do resultado das regras obtidas, as médias
+dos melhores resultados de cada execução para a mesma regra foram calculadas e
+se encontram na tabela \ref{tab:medias}.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    \multirow{2}{*}{Classe} & Média Fitness & Média Fitness \\
+    & Treinamento & Teste \\
+    \hline
+    1 & 0.932275 & 0.981523\\
+    \hline
+    2 & 0.825245 & 0.850473\\
+    \hline
+    3 & 0.976214 & 0.969933\\
+    \hline
+    4 & 0.850391 & 0.725871\\
+    \hline
+    5 & 0.896647 & 0.831133\\
+    \hline
+    6 & 0.939587 & 0.809525\\
+    \hline
+  \end{tabular}
+  \caption{Média das avaliações de cada classe}
+  \label{tab:medias}
+\end{table}
+
+Ao comparar os resultados obtidos neste trabalho com os de Fidelis \textit{et al.}(2000) e
+Miranda \textit{et al.}(2003), percebe-se que as avaliações das regras encontradas
+são bem próximas. Entretanto, as condições associadas a cada regra variam em quase
+todas elas.
+
+Em seguida, alguns parâmetros do algoritmo genético foram alterados com o intuito
+de obter melhores resultados.
+
+Alterando apenas o peso máximo permito o resultados encontrados foram diferentes
+(tabela \ref{tab:etapa2-1}).
+Para algumas classes como a 1 e 2 as avaliações foram melhores, já na classe 5
+o fitness foi igual porém a quantidade de condições foi menor, a classe 3 permaneceu
+com as mesmas avaliações e a 4 e 6 pioraram.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|l|c|c|}
+    \hline
+    Classe & \multicolumn{1}{c|}{Regras}  & Fitness & Fitness\\
+    das Doenças &  & Treinamento & Teste\\
+    \hline
+    \multirow{2}{*}{1} & clubbing of the rete ridges >= 1 & 0.955212 & 0.996290 \\
+    & perifollicular parakeratosis < 1  & &\\
+    \hline
+    \multirow{6}{*}{2} & koebner phenomenon  < 1 & 0.910755 &  0.923471 \\
+    & polygonal papules  == 0 & &\\
+    & fibrosis of the papillary dermis < 1 & &\\
+    & elongation of the rete ridges != 3 & &\\
+    & thinning of the suprapapillary epidermis == 0 & &\\
+    & perifollicular parakeratosis == 0 & &\\
+    \hline
+    \multirow{2}{*}{3} & PNL infiltrate == 0  & 0.992163 &0.994803\\
+    & band-like infiltrate >= 2 & &\\
+    \hline
+    \multirow{5}{*}{4} & koebner phenomenon  >= 1 & 0.892055 &  0.727187  \\
+    & scalp involvement != 2 & &\\
+    & melanin incontinence < 1 & &\\
+    & exocytosis >= 1  & &\\
+    & clubbing of the rete ridges < 1  & &\\
+    & thinning of the suprapapillary epidermis != 2   & &\\
+    \hline
+    \multirow{6}{*}{5} & polygonal papules  < 2  & 0.996662 & 0.991431 \\
+    & fibrosis of the papillary dermis != 0  & &\\
+    &  hyperkeratosis < 3  & &\\
+    & focal hypergranulosis < 1 & &\\
+    \hline
+    \multirow{2}{*}{6} & koebner phenomenon  != 2  & 0.986932 & 0.986765 \\
+    & perifollicular parakeratosis >= 1 & &\\
+    \hline
+  \end{tabular}
+  \caption{Peso máximo = 0.2}
+  \label{tab:etapa2-1}
+\end{table}
+
+As maiores dificuldades na reprodução dos modelos foi conseguir analisar os
+resultados e compara-los, e ainda entender que um número grande de condições
+não satisfaz o propósito da mineração de dados.
+
+\nocite{*}
 \bibliographystyle{sbc}
 \bibliography{bib}
 

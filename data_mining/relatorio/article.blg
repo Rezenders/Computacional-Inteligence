@@ -1,48 +1,48 @@
-This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: article.aux
 The style file: sbc.bst
 Database file #1: bib.bib
-Warning--empty booktitle in 003
 Warning--empty booktitle in 001
-You've used 4 entries,
+You've used 3 entries,
             1935 wiz_defined-function locations,
-            497 strings with 4181 characters,
-and the built_in function-call counts, 1470 in all, are:
-= -- 143
-> -- 40
-< -- 6
-+ -- 14
-- -- 12
-* -- 106
-:= -- 249
-add.period$ -- 12
-call.type$ -- 4
-change.case$ -- 26
-chr.to.int$ -- 4
-cite$ -- 6
-duplicate$ -- 70
-empty$ -- 119
-format.name$ -- 20
-if$ -- 301
+            486 strings with 4207 characters,
+and the built_in function-call counts, 1059 in all, are:
+= -- 102
+> -- 27
+< -- 4
++ -- 8
+- -- 8
+* -- 68
+:= -- 182
+add.period$ -- 8
+call.type$ -- 3
+change.case$ -- 19
+chr.to.int$ -- 3
+cite$ -- 4
+duplicate$ -- 53
+empty$ -- 83
+format.name$ -- 13
+if$ -- 217
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 5
-newline$ -- 22
-num.names$ -- 12
-pop$ -- 31
+missing$ -- 3
+newline$ -- 17
+num.names$ -- 9
+pop$ -- 22
 preamble$ -- 1
-purify$ -- 26
+purify$ -- 19
 quote$ -- 0
-skip$ -- 51
+skip$ -- 45
 stack$ -- 0
-substring$ -- 89
-swap$ -- 10
-text.length$ -- 2
+substring$ -- 64
+swap$ -- 11
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 22
-warning$ -- 2
-while$ -- 12
+type$ -- 18
+warning$ -- 1
+while$ -- 8
 width$ -- 0
-write$ -- 52
-(There were 2 warnings)
+write$ -- 37
+(There was 1 warning)
