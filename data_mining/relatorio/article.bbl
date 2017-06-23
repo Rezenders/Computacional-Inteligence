@@ -1,0 +1,23 @@
+\begin{thebibliography}{}
+
+\bibitem[Mogul and Borg 1991]{002}
+Mogul, J.~C. and Borg, A. (1991).
+\newblock The effect of context switches on cache performance.
+\newblock {\em SIGPLAN Not.}, 26:75--84.
+
+\bibitem[Montgomery 2005]{004}
+Montgomery, D.~C. (2005).
+\newblock {\em Design and Analysis of Experiments}.
+\newblock John Wiley, 3 edition.
+
+\bibitem[Moore 2000]{003}
+Moore, G.~E. (2000).
+\newblock Readings in computer architecture.
+\newblock chapter Cramming more components onto integrated circuits, pages
+  56--59. Morgan Kaufmann Publishers Inc., San Francisco, CA, USA.
+
+\bibitem[Ousterhout and K 1990]{001}
+Ousterhout, J.~K. and K, J. (1990).
+\newblock Why aren't operating systems getting faster as fast as hardware?
+
+\end{thebibliography}

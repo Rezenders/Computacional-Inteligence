@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: article.aux
+The style file: sbc.bst
+Database file #1: bib.bib
+Warning--empty booktitle in 003
+Warning--empty booktitle in 001
+You've used 4 entries,
+            1935 wiz_defined-function locations,
+            497 strings with 4181 characters,
+and the built_in function-call counts, 1470 in all, are:
+= -- 143
+> -- 40
+< -- 6
++ -- 14
+- -- 12
+* -- 106
+:= -- 249
+add.period$ -- 12
+call.type$ -- 4
+change.case$ -- 26
+chr.to.int$ -- 4
+cite$ -- 6
+duplicate$ -- 70
+empty$ -- 119
+format.name$ -- 20
+if$ -- 301
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 5
+newline$ -- 22
+num.names$ -- 12
+pop$ -- 31
+preamble$ -- 1
+purify$ -- 26
+quote$ -- 0
+skip$ -- 51
+stack$ -- 0
+substring$ -- 89
+swap$ -- 10
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 22
+warning$ -- 2
+while$ -- 12
+width$ -- 0
+write$ -- 52
+(There were 2 warnings)
