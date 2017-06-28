@@ -3,6 +3,8 @@ ag
 ~ag
 ./ag
 .ag
+*.bbl
+*.blg
 *.zip
 *.aux
 *.log
