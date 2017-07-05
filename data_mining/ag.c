@@ -90,7 +90,7 @@ int main() {
 
   srand(666);
 
-  for (int class = 1; class <= 6; class ++) {
+  for (int class = 3; class <= 3; class ++) {
     struct rule best;
     double mean_av =0;
     double mean_test =0;
