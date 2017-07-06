@@ -16,14 +16,21 @@ struct Number {
 void init_numbers(struct Number num[], uint8_t n_numbers);
 void init_numbers_zeros(struct Number num[]);
 void init_numbers_ones(struct Number num[]);
+void init_numbers_twos(struct Number num[]);
+void init_numbers_threes(struct Number num[]);
+void init_numbers_fours(struct Number num[]);
+void init_numbers_fives(struct Number num[]);
 void init_weights(uint8_t config, struct Neuron n[], uint8_t n_neurons);
 void print_Neuron(struct Neuron n[], uint8_t n_neurons);
 void print_Number(struct Number num[], uint8_t n_numbers);
 void double_neuron_train(struct Neuron *n, struct Number num1,
                          struct Number num2, uint8_t d0, uint8_t d1);
 void single_neuron_train(struct Neuron *n, struct Number num, uint8_t d);
-void test_neuron(struct Neuron n, struct Number num);
+void multiple_neuron_train(struct Neuron *n, struct Number num[],
+                           uint8_t size_num, uint8_t train_number);
+uint8_t test_neuron(struct Neuron n, struct Number num);
 void test_neuron_numbers(struct Neuron n, struct Number num[], uint8_t n_nums);
+void test_multiple_neurons(struct Neuron n[], struct Number num[], uint8_t n_neurons, uint8_t n_nums);
 
 int main() {
   srand(666);
@@ -42,8 +49,17 @@ int main() {
   init_numbers_zeros(bunch_zeros);
   struct Number bunch_ones[10];
   init_numbers_ones(bunch_ones);
+  struct Number bunch_twos[10];
+  init_numbers_twos(bunch_twos);
+  struct Number bunch_threes[10];
+  init_numbers_threes(bunch_threes);
+  struct Number bunch_fours[10];
+  init_numbers_fours(bunch_fours);
+  struct Number bunch_fives[10];
+  init_numbers_fives(bunch_fives);
   // print_Number(num, n_numbers);
 
+  printf("\n------------------EXERCICIO 1 ------------------\n");
   uint8_t n_neurons = 1;
   struct Neuron n[n_neurons];
   init_weights(config, n, n_neurons);
@@ -65,25 +81,47 @@ int main() {
   struct Neuron n2[n_neurons_2];
   init_weights(config, n2, n_neurons_2);
 
-  double_neuron_train(&n2[0], num[0], num[1], 1,0);
-  double_neuron_train(&n2[1], num[0], num[1], 0,1);
+  double_neuron_train(&n2[0], num[0], num[1], 1, 0);
+  double_neuron_train(&n2[1], num[0], num[1], 0, 1);
   printf("Pesos neuronios\n");
   print_Neuron(n2, n_neurons_2);
-  printf("Teste dos numeros de 0-5\n");
-  printf("neuronio do 0\n");
-  test_neuron_numbers(n2[0], num, 6);
-  printf("neuronio do 1\n");
-  test_neuron_numbers(n2[1], num, 6);
-  printf("Teste das variações de 0\n");
-  printf("neuronio do 0\n");
-  test_neuron_numbers(n2[0], bunch_zeros, 10);
-  printf("neuronio do 1\n");
-  test_neuron_numbers(n2[1], bunch_zeros, 10);
-  printf("Teste das variações de 1\n");
-  printf("neuronio do 0\n");
-  test_neuron_numbers(n2[0], bunch_ones, 10);
-  printf("neuronio do 1\n");
-  test_neuron_numbers(n2[1], bunch_ones, 10);
+
+  printf("\nTeste dos numeros de 0-5\n");
+  test_multiple_neurons(n2, num, n_neurons_2, 6);
+  printf("\nTeste das variações de 0\n");
+  test_multiple_neurons(n2, bunch_zeros, n_neurons_2, 10);
+  printf("\nTeste das variações de 1\n");
+  test_multiple_neurons(n2, bunch_ones, n_neurons_2, 10);
+
+  printf("\n------------------EXERCICIO 3 ------------------\n");
+  uint8_t n_neurons_3 = 6;
+  struct Neuron n3[n_neurons_3];
+  init_weights(config, n3, n_neurons_3);
+
+  multiple_neuron_train(&n3[0], num, n_numbers, 0);
+  multiple_neuron_train(&n3[1], num, n_numbers, 1);
+  multiple_neuron_train(&n3[2], num, n_numbers, 2);
+  multiple_neuron_train(&n3[3], num, n_numbers, 3);
+  multiple_neuron_train(&n3[4], num, n_numbers, 4);
+  multiple_neuron_train(&n3[5], num, n_numbers, 5);
+
+  printf("Pesos neuronios\n");
+  print_Neuron(n3, n_neurons_3);
+
+  test_multiple_neurons(n3, num, n_neurons_3, n_numbers);
+  printf("\nTeste das variações de 0\n");
+  test_multiple_neurons(n3, bunch_zeros, n_neurons_3, 10);
+  printf("\nTeste das variações de 1\n");
+  test_multiple_neurons(n3, bunch_ones, n_neurons_3, 10);
+  printf("\nTeste das variações de 2\n");
+  test_multiple_neurons(n3, bunch_twos, n_neurons_3, 10);
+  printf("\nTeste das variações de 3\n");
+  test_multiple_neurons(n3, bunch_threes, n_neurons_3, 10);
+  printf("\nTeste das variações de 4\n");
+  test_multiple_neurons(n3, bunch_fours, n_neurons_3, 10);
+  printf("\nTeste das variações de 5\n");
+  test_multiple_neurons(n3, bunch_fives, n_neurons_3, 10);
+
 }
 
 void init_numbers(struct Number num[], uint8_t n_numbers) {
@@ -118,7 +156,7 @@ void init_numbers(struct Number num[], uint8_t n_numbers) {
 }
 void init_numbers_zeros(struct Number num[]) {
   for (size_t i = 0; i < 10; i++) {
-    num[i].id =0;
+    num[i].id = 0;
   }
   memcpy(num[0].tiles, zero_1, 30 * sizeof(uint8_t));
   memcpy(num[1].tiles, zero_2, 30 * sizeof(uint8_t));
@@ -133,7 +171,7 @@ void init_numbers_zeros(struct Number num[]) {
 }
 void init_numbers_ones(struct Number num[]) {
   for (size_t i = 0; i < 10; i++) {
-    num[i].id =1;
+    num[i].id = 1;
   }
   memcpy(num[0].tiles, one_1, 30 * sizeof(uint8_t));
   memcpy(num[1].tiles, one_2, 30 * sizeof(uint8_t));
@@ -145,6 +183,66 @@ void init_numbers_ones(struct Number num[]) {
   memcpy(num[7].tiles, one_8, 30 * sizeof(uint8_t));
   memcpy(num[8].tiles, one_9, 30 * sizeof(uint8_t));
   memcpy(num[9].tiles, one_10, 30 * sizeof(uint8_t));
+}
+void init_numbers_twos(struct Number num[]) {
+  for (size_t i = 0; i < 10; i++) {
+    num[i].id = 2;
+  }
+  memcpy(num[0].tiles, two_1, 30 * sizeof(uint8_t));
+  memcpy(num[1].tiles, two_2, 30 * sizeof(uint8_t));
+  memcpy(num[2].tiles, two_3, 30 * sizeof(uint8_t));
+  memcpy(num[3].tiles, two_4, 30 * sizeof(uint8_t));
+  memcpy(num[4].tiles, two_5, 30 * sizeof(uint8_t));
+  memcpy(num[5].tiles, two_6, 30 * sizeof(uint8_t));
+  memcpy(num[6].tiles, two_7, 30 * sizeof(uint8_t));
+  memcpy(num[7].tiles, two_8, 30 * sizeof(uint8_t));
+  memcpy(num[8].tiles, two_9, 30 * sizeof(uint8_t));
+  memcpy(num[9].tiles, two_10, 30 * sizeof(uint8_t));
+}
+void init_numbers_threes(struct Number num[]) {
+  for (size_t i = 0; i < 10; i++) {
+    num[i].id = 3;
+  }
+  memcpy(num[0].tiles, three_1, 30 * sizeof(uint8_t));
+  memcpy(num[1].tiles, three_2, 30 * sizeof(uint8_t));
+  memcpy(num[2].tiles, three_3, 30 * sizeof(uint8_t));
+  memcpy(num[3].tiles, three_4, 30 * sizeof(uint8_t));
+  memcpy(num[4].tiles, three_5, 30 * sizeof(uint8_t));
+  memcpy(num[5].tiles, three_6, 30 * sizeof(uint8_t));
+  memcpy(num[6].tiles, three_7, 30 * sizeof(uint8_t));
+  memcpy(num[7].tiles, three_8, 30 * sizeof(uint8_t));
+  memcpy(num[8].tiles, three_9, 30 * sizeof(uint8_t));
+  memcpy(num[9].tiles, three_10, 30 * sizeof(uint8_t));
+}
+void init_numbers_fours(struct Number num[]) {
+  for (size_t i = 0; i < 10; i++) {
+    num[i].id = 4;
+  }
+  memcpy(num[0].tiles, four_1, 30 * sizeof(uint8_t));
+  memcpy(num[1].tiles, four_2, 30 * sizeof(uint8_t));
+  memcpy(num[2].tiles, four_3, 30 * sizeof(uint8_t));
+  memcpy(num[3].tiles, four_4, 30 * sizeof(uint8_t));
+  memcpy(num[4].tiles, four_5, 30 * sizeof(uint8_t));
+  memcpy(num[5].tiles, four_6, 30 * sizeof(uint8_t));
+  memcpy(num[6].tiles, four_7, 30 * sizeof(uint8_t));
+  memcpy(num[7].tiles, four_8, 30 * sizeof(uint8_t));
+  memcpy(num[8].tiles, four_9, 30 * sizeof(uint8_t));
+  memcpy(num[9].tiles, four_10, 30 * sizeof(uint8_t));
+}
+void init_numbers_fives(struct Number num[]) {
+  for (size_t i = 0; i < 10; i++) {
+    num[i].id = 5;
+  }
+  memcpy(num[0].tiles, five_1, 30 * sizeof(uint8_t));
+  memcpy(num[1].tiles, five_2, 30 * sizeof(uint8_t));
+  memcpy(num[2].tiles, five_3, 30 * sizeof(uint8_t));
+  memcpy(num[3].tiles, five_4, 30 * sizeof(uint8_t));
+  memcpy(num[4].tiles, five_5, 30 * sizeof(uint8_t));
+  memcpy(num[5].tiles, five_6, 30 * sizeof(uint8_t));
+  memcpy(num[6].tiles, five_7, 30 * sizeof(uint8_t));
+  memcpy(num[7].tiles, five_8, 30 * sizeof(uint8_t));
+  memcpy(num[8].tiles, five_9, 30 * sizeof(uint8_t));
+  memcpy(num[9].tiles, five_10, 30 * sizeof(uint8_t));
 }
 
 void init_weights(uint8_t config, struct Neuron n[], uint8_t n_neurons) {
@@ -165,9 +263,9 @@ void init_weights(uint8_t config, struct Neuron n[], uint8_t n_neurons) {
 
 void print_Neuron(struct Neuron n[], uint8_t n_neurons) {
   for (size_t neurons_size = 0; neurons_size < n_neurons; neurons_size++) {
-    printf("Neuron\n");
+    printf("\nNeuron %d\n",neurons_size);
     for (size_t i = 0; i < 31; i++) {
-      if ((i==1) || (i % 5) == 1) {
+      if ((i == 1) || (i % 5) == 1) {
         printf("\n");
       }
       printf("%f ", n[neurons_size].weights[i]);
@@ -221,7 +319,8 @@ void double_neuron_train(struct Neuron *n, struct Number num1,
     ++epoca;
   } while (d0 != output0 || d1 != output1);
 
-  printf("output%u: %f output%u: %f n_epocas: %d \n", num1.id,num2.id,output0, output1, epoca);
+  printf("output%u: %f output%u: %f n_epocas: %d \n", num1.id, num2.id, output0,
+         output1, epoca);
 }
 
 void single_neuron_train(struct Neuron *n, struct Number num, uint8_t d) {
@@ -243,20 +342,64 @@ void single_neuron_train(struct Neuron *n, struct Number num, uint8_t d) {
 
     ++epoca;
   } while (d != output);
-  printf("id: %d output: %f n_epocas: %d \n",num.id, output, epoca);
+  printf("id: %d output: %f n_epocas: %d \n", num.id, output, epoca);
+}
+
+void multiple_neuron_train(struct Neuron *n, struct Number num[],
+                           uint8_t size_num, uint8_t train_number) {
+  int epoca = 0;
+  while (1) {
+    int different = 0;
+    for (size_t num_it = 0; num_it < size_num; num_it++) {
+      float output = n->weights[0] * 1;
+
+      for (size_t i = 1; i < 31; i++) {
+        output += n->weights[i] * num[num_it].tiles[i - 1];
+      }
+      output = (output > 0);
+      uint8_t d = (train_number == num[num_it].id);
+      if (d != output) {
+        ++different;
+        n->weights[0] = n->weights[0] + (d - output) * 1;
+        for (size_t j = 1; j < 31; j++) {
+          n->weights[j] =
+              n->weights[j] + (d - output) * num[num_it].tiles[j - 1];
+        }
+      }
+    }
+    ++epoca;
+    if (different == 0) {
+      break;
+    }
+  }
+
+  printf("Numero de epocas para treinar neuronio %d: %d \n", train_number, epoca);
 }
 
 void test_neuron_numbers(struct Neuron n, struct Number num[], uint8_t n_nums) {
   for (size_t i = 0; i < n_nums; i++) {
-    test_neuron(n, num[i]);
+    uint8_t output;
+    output = test_neuron(n, num[i]);
+    printf("Test result id %d: %u \n", num[i].id, output);
   }
 }
-void test_neuron(struct Neuron n, struct Number num) {
+uint8_t test_neuron(struct Neuron n, struct Number num) {
   float output = n.weights[0] * 1;
 
   for (size_t i = 1; i < 31; i++) {
     output += n.weights[i] * num.tiles[i - 1];
   }
-  output = (output > 0);
-  printf("Test result id %d: %f \n", num.id, output);
+  return (output > 0);
+}
+
+void test_multiple_neurons(struct Neuron n[], struct Number num[], uint8_t n_neurons, uint8_t n_nums){
+  for (size_t i = 0; i < n_nums; i++) {
+    printf("\nTeste dos neuronios para o numero %d\n",num[i].id);
+    for (size_t j = 0; j < n_neurons; j++) {
+      uint8_t output=-1;
+      output = test_neuron(n[j], num[i]);
+      printf(" %d ",output);
+    }
+  }
+  printf("\n");
 }
