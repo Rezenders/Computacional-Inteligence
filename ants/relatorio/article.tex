@@ -1,0 +1,118 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%  Última alteração em 08/2013 por Rafael Pasquini (WTDCC 2013)
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt]{article}
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
+%\usepackage[dvips]{graphicx}
+%\usepackage[pdftex]{color,graphicx}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{verbatim}
+\usepackage{array}
+\usepackage{amssymb,amsmath}
+\usepackage[brazilian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tabularx}
+\usepackage{mathtools}
+
+\sloppy
+
+\title{4$^o$ Trabalho de Inteligência Computacional - Colônia de formigas}
+
+\author{Autor: Gustavo Rezende Silva,\\ Orientador:Gina Maira Barbosa
+de Oliveira}
+
+
+\address{Faculdade de Computação\\
+ Universidade Federal do Uberlândia (UFU)\\
+  Uberlândia -- MG -- Brasil
+  \email{gustavorezendesilva@hotmail.com, gina@ufu.br}
+}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{resumo}
+Este trabalho tem como intuito desenvolver um algoritmo de colônia de formigas (ACO)
+para resolver o problema do caixero viajante (PCV). Podendo ter como entrada um
+conjunto de vertices com suas coordenas ou distância entre os nós especifícadas.
+\end{resumo}
+
+\begin{palavraschave}
+inteligência coletiva, algoritmo de colônia de formigas, caixero viajante, inteligência computacional
+\end{palavraschave}
+
+\section{Introdução}
+\label{sec:intro}
+
+O algoritmo de colônia de formigas é baseado no comportamento real das formigas
+quando em grupos. Individualmente estes insetos não apresentam muita inteligência,
+porém quando reunidos são capazes de realizar várias tarefas.
+
+A comunicação das formigas é baseada no uso de feromônios, que é depositado
+ao longo do caminho que elas percorrem. Para decidir qual caminho percorrer
+estes insetos seguem, de maneira probabilistica, os caminhos com mais feromônios.
+O comportamento das mesmas pode ser observado na fig. \ref{fig:ants}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics{ants.jpg}
+  \caption{Comportamento das formigas no mundo real. Fonte: bioinfo3d.cs.tau.ac.il}
+  \label{fig:ants}
+\end{figure}
+
+Um aspecto importante sobre os feromônios é que ele evapora com o tempo, ou seja,
+quanto menos um caminho é percorrido menos chances ele tem de ser escolhido.
+
+\section{Metodologia}
+\label{sec:desen}
+
+O algoritmo de colônia de formigas está respresentado de maneira simplificada na fig. \ref{fig:flux}.
+
+\begin{figure}
+  \centering
+  \includegraphics[height=8cm]{formigas.png}
+  \caption{Fluxograma do algoritmo de colônia de formigas}
+  \label{fig:flux}
+\end{figure}
+
+A primeira etapa para resolver o problema do caixero viajante utilizando o ACO é
+colocar uma formiga em cada nó, ou distribui-las aleatóriamente. Cada um dos insetos
+constroi uma solução individualmente.
+
+Em seguida, a formiga escolhe para qual cidade irá se locomover probabilisticamente
+seguindo a equação de probabilidade \ref{eq:prob}.
+
+\begin{equation}\label{eq:prob}
+  p_{ij}^{k}(t)=
+  % \being{cases}
+    \frac{(\tau_{ij}(t))^\alpha * (\eta_{ij})^\beta}{\sum_{l\in N_{i}^{k}}{(\tau_{ij}(t))^\alpha * (\eta_{ij})^\beta}}
+  % \end{cases}
+\end{equation}
+Se j pertencer ao conjunto de soluções, caso contrario a probabilidade é igual a 0.
+Onde:
+$\tau_{ij}(t)$: quantidade de feromônio presente no caminho $(i,j)$
+$\eta_{ij} = \frac{1}{d_{ij}}$: visibilidade da cidade $j$ com relação a cidade $i$
+$\alpha$ e $\beta$ são parâmetros para determinar a influência do feromônio e da informação
+heurística
+$N_{i}{k}$ é a vizinhança factível da formiga $k$ (i.e., o conjunto
+das cidades ainda não visitadas pela formiga $k$)
+
+Ao ir para a próxima cidade a cidade anterior é retirada do conjunto de próximas
+cidades permitidas. Então este processo é repetído até que a formiga passe por todas
+as cidades, e depois ela retorna para a cidade inicial fechando o ciclo.
+
+
+
+\nocite{*}
+\bibliographystyle{sbc}
+\bibliography{bib}
+
+\end{document}
