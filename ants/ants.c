@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
   }
   printf("Arquivo a ser lido: %s\n", file_path);
 
-  FILE *fp = fopen("nodes_xy", "r");
+  FILE *fp = fopen(file_path, "r");
   if (fp == NULL)
     fputs("Failed to open file!\n", stderr);
 
@@ -86,102 +86,113 @@ int main(int argc, char *argv[]) {
     }
   }
 
+int n_exec= 30;
+while(n_exec>0){
   for (size_t i = 0; i < n_ants; i++) {
     ants[i].ant_id = i;
     ants[i].initial_node = nodes[rand() % n_nodes];
     ants[i].current_node = ants[i].initial_node;
     ants[i].path_dist = 0;
+    for (size_t j = 0; j < n_nodes; j++) {
+      ants[i].explored_nodes[j] = 0;
+    }
   }
-
   // for (size_t iterations = 0; iterations < 1; iterations++) {
-  for (size_t iterations = 0; iterations < n_nodes; iterations++) {
+    for (size_t iterations = 0; iterations < n_nodes; iterations++) {
+      for (size_t a = 0; a < n_ants; a++) {
+        ants[a].node_order[iterations] = ants[a].current_node;
+        ants[a].explored_nodes[ants[a].current_node.id]=1;
+
+        int next_node = 0;
+        double sum_fn = 0;
+        for (size_t n1 = 0; n1 < n_nodes; n1++) {
+          if ((!ants[a].explored_nodes[n1]) && (ants[a].current_node.d[n1]!=0)) {
+            sum_fn += (pow(ants[a].current_node.f[n1], alpha) *
+                       pow(1.0 / ants[a].current_node.d[n1], beta));
+                      //  printf("visibilidade %f\n",   pow(ants[a].current_node.d[n1], beta));
+          }
+        }
+        // printf("sum_fn %f\n",sum_fn);
+        // Calcula probabilidade para os proximos nós possíveis e monta uma especie de roleta na estrutura do nó
+        // printf("\nProbabilidade dos nós formiga %d \n", a);
+        for (size_t n2 = 0; n2 < n_nodes; n2++) {
+          if ((!ants[a].explored_nodes[n2]) && (ants[a].current_node.d[n2]!=0)) {
+            ants[a].current_node.prob[n2] =
+                (pow(ants[a].current_node.f[n2], alpha) *
+                 pow(1.0 / ants[a].current_node.d[n2], beta)) /
+                sum_fn;
+          } else {
+            ants[a].current_node.prob[n2] = 0;
+          }
+          if(n2!=0){
+            ants[a].current_node.prob[n2] += ants[a].current_node.prob[n2-1];
+          }
+          // printf("%f\n", ants[a].current_node.prob[n2]);
+        }
+
+        double chance = (rand()%1001)/1000.0;
+        for (size_t n3 = 0; n3 < n_nodes; n3++) {
+          if((ants[a].explored_nodes[n3]!=1) && (chance < ants[a].current_node.prob[n3])){
+            next_node = n3;
+            ants[a].explored_nodes[n3]= 1;
+            ants[a].path_dist += ants[a].current_node.d[n3];
+            ants[a].current_node = nodes[n3];
+            break;
+          }
+        }
+
+      }
+
+    }
+
     for (size_t a = 0; a < n_ants; a++) {
-      ants[a].node_order[iterations] = ants[a].current_node;
-      ants[a].explored_nodes[ants[a].current_node.id]=1;
-
-      int next_node = 0;
-      double sum_fn = 0;
-      for (size_t n1 = 0; n1 < n_nodes; n1++) {
-        if ((!ants[a].explored_nodes[n1]) && (ants[a].current_node.d[n1]!=0)) {
-          sum_fn += (pow(ants[a].current_node.f[n1], alpha) *
-                     pow(1.0 / ants[a].current_node.d[n1], beta));
-                    //  printf("visibilidade %f\n",   pow(ants[a].current_node.d[n1], beta));
-        }
-      }
-      // printf("sum_fn %f\n",sum_fn);
-      // Calcula probabilidade para os proximos nós possíveis e monta uma especie de roleta na estrutura do nó
-      // printf("\nProbabilidade dos nós formiga %d \n", a);
-      for (size_t n2 = 0; n2 < n_nodes; n2++) {
-        if ((!ants[a].explored_nodes[n2]) && (ants[a].current_node.d[n2]!=0)) {
-          ants[a].current_node.prob[n2] =
-              (pow(ants[a].current_node.f[n2], alpha) *
-               pow(1.0 / ants[a].current_node.d[n2], beta)) /
-              sum_fn;
-        } else {
-          ants[a].current_node.prob[n2] = 0;
-        }
-        if(n2!=0){
-          ants[a].current_node.prob[n2] += ants[a].current_node.prob[n2-1];
-        }
-        // printf("%f\n", ants[a].current_node.prob[n2]);
-      }
-
-      double chance = (rand()%1001)/1000.0;
-      for (size_t n3 = 0; n3 < n_nodes; n3++) {
-        if((ants[a].explored_nodes[n3]!=1) && (chance < ants[a].current_node.prob[n3])){
-          next_node = n3;
-          ants[a].explored_nodes[n3]= 1;
-          ants[a].path_dist += ants[a].current_node.d[n3];
-          ants[a].current_node = nodes[n3];
-          break;
-        }
-      }
-
+      ants[a].node_order[n_nodes]= ants[a].initial_node;
+      ants[a].path_dist += ants[a].current_node.d[ants[a].initial_node.id];
     }
 
-  }
-
-  for (size_t a = 0; a < n_ants; a++) {
-    ants[a].node_order[n_nodes]= ants[a].initial_node;
-    ants[a].path_dist += ants[a].current_node.d[ants[a].initial_node.id];
-  }
-
-  for (size_t n = 0; n < n_nodes; n++) {
-    // printf("f ");
-    for (size_t n2 = 0; n2 < n_nodes; n2++) {
-      nodes[n].f[n2] *=(1-0.5);
-      // printf(" %f ",nodes[n].f[n2]);
-    }
-    // printf("\n");
-  }
-
-  //NAO TESTADO
-  for (size_t a = 0; a < n_ants; a++) {
     for (size_t n = 0; n < n_nodes; n++) {
-      nodes[ants[a].node_order[n].id].f[ants[a].node_order[n+1].id] += 1000*1.0/ants[a].path_dist;
-      nodes[ants[a].node_order[n+1].id].f[ants[a].node_order[n].id] += 1000*1.0/ants[a].path_dist;
+      // printf("f ");
+      for (size_t n2 = 0; n2 < n_nodes; n2++) {
+        nodes[n].f[n2] *=(1-0.5);
+        // printf(" %f ",nodes[n].f[n2]);
+      }
+      // printf("\n");
     }
-  }
 
-  for (size_t n = 0; n < n_nodes; n++) {
-    printf("f ");
-    for (size_t n2 = 0; n2 < n_nodes; n2++) {
-      printf(" %f ",nodes[n].f[n2]);
+    //NAO TESTADO
+    for (size_t a = 0; a < n_ants; a++) {
+      for (size_t n = 0; n < n_nodes; n++) {
+        nodes[ants[a].node_order[n].id].f[ants[a].node_order[n+1].id] += 1000*1.0/ants[a].path_dist;
+        nodes[ants[a].node_order[n+1].id].f[ants[a].node_order[n].id] += 1000*1.0/ants[a].path_dist;
+      }
     }
-    printf("\n");
-  }
 
+    printf("FEROMONIOS ");
+    for (size_t n = 0; n < n_nodes; n++) {
+      printf("f ");
+      for (size_t n2 = 0; n2 < n_nodes; n2++) {
+        printf(" %f ",nodes[n].f[n2]);
+      }
+      printf("\n");
+    }
+n_exec--;
+}
 
-  printf("Ant 4 initial_node %d \n", ants[4].initial_node.id);
-  for (size_t i = 0; i < n_nodes; i++) {
-    printf("ants explored_nodes %d\n", ants[1].explored_nodes[i]);
-  }
-  for (size_t i = 0; i < n_nodes+1; i++) {
-    printf("Node order %d\n", ants[4].node_order[i].id);
-  }
+  // printf("Ant 4 initial_node %d \n", ants[4].initial_node.id);
+  // for (size_t i = 0; i < n_nodes; i++) {
+  //   printf("ants explored_nodes %d\n", ants[1].explored_nodes[i]);
+  // }
+  // for (size_t i = 0; i < n_nodes+1; i++) {
+  //   printf("Node order %d\n", ants[4].node_order[i].id);
+  // }
+  int best_dist =999999;
   for (size_t i = 0; i < n_ants; i++) {
-    printf("Total dist %d \n",ants[i].path_dist);
+    if(ants[i].path_dist<best_dist){
+      best_dist = ants[i].path_dist;
+    }
+    // printf("Total dist %d \n",ants[i].path_dist);
   }
+  printf("Best dist %d \n",best_dist);
   // free(file_path);
   // free(teste);
   // free(nodes->d);
