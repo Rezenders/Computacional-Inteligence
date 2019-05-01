@@ -55,18 +55,20 @@ int main() {
     getMinMaxAv(p, pop_size);
 
     for (size_t i = 0; i < n_ger; i++) {
-      // tour(p, p_index, 10, n_sons);
+      // tour(p, pop_size, p_index, 3, n_sons);
       setRoulette(p, pop_size, roulette);
       spinRoulette(roulette, pop_size, p_index, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);
       updatePop(p, pop_size, sons, n_sons, ELIT);
       getMinMaxAv(p, pop_size);
+
+      if (av_min == 0) {
+          n_zero++;
+          break;
+      }
     }
     printf("\n Melhor avalicao na execucao %i foi: %i", ag_n, av_min);
 
-    if (av_min == 0) {
-      n_zero++;
-    }
   }
 
   printf("\nPorcentagem de sucesso %lf\n", (double)n_zero / n_execucao);
@@ -204,7 +206,7 @@ void crossOver(int parent1[], int parent2[], int son1[], int son2[],
   while (!cycle[index]) {
     cycle[index] = 1;
     for (size_t i = 0; i < 10; i++) {
-      if (parent2[index] == parent1[i]) {
+      if (parent1[index] == parent2[i]) {
         index = i;
         break;
       }
