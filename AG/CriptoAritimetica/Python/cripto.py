@@ -4,6 +4,8 @@ import random
 from deap import base
 from deap import creator
 from deap import tools
+# from scoop import futures
+import multiprocessing
 
 def evaluateSend(i):
     result = (i[4] * 10000 + i[5] * 1000 + i[2] * 100 + i[1] * 10 + i[7]) \
@@ -41,25 +43,35 @@ def mutShuffle(ind):
     ind[index2] = temp;
     return ind,
 
-creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-creator.create("InvFitness", base.Fitness, weights=(1.0,))
-creator.create("Individual", list, fitness=creator.FitnessMin, invfitness=creator.InvFitness)
-
-IND_SIZE = 10
-
-toolbox = base.Toolbox()
-toolbox.register("indices", random.sample, range(IND_SIZE), IND_SIZE)
-toolbox.register("individual", tools.initIterate, creator.Individual,
-                 toolbox.indices)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-
-toolbox.register("evaluate", evaluateSend)
-toolbox.register("mate", cxCycle)
-toolbox.register("mutate", mutShuffle)
-toolbox.register("select", tools.selRoulette, fit_attr='invfitness')
 
 def main():
-    pop_size = 100;
+    creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+    creator.create("InvFitness", base.Fitness, weights=(1.0,))
+    creator.create("Individual", list, fitness=creator.FitnessMin, invfitness=creator.InvFitness)
+
+    IND_SIZE = 10
+
+    toolbox = base.Toolbox()
+    toolbox.register("indices", random.sample, range(IND_SIZE), IND_SIZE)
+    toolbox.register("individual", tools.initIterate, creator.Individual,
+                     toolbox.indices)
+    toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+    toolbox.register("evaluate", evaluateSend)
+    toolbox.register("mate", cxCycle)
+    toolbox.register("mutate", mutShuffle)
+    toolbox.register("select", tools.selRoulette, fit_attr='invfitness')
+    # toolbox.register("select", tools.selTournament, tournsize=3, fit_attr='invfitness')
+    #toolbox.register("select", tools.selBest)
+
+
+
+    # toolbox.register("map", futures.map)
+    #pool = multiprocessing.Pool()
+    #toolbox.register("map", pool.map)
+
+
+    pop_size = 200;
     cros_over = 0.8;
     n_sons = int(pop_size*cros_over);
     n_ger = 200;
