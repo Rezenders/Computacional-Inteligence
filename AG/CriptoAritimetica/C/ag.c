@@ -55,7 +55,7 @@ int main() {
     getMinMaxAv(p, pop_size);
 
     for (size_t i = 0; i < n_ger; i++) {
-      // tour(p, pop_size, p_index, 3, n_sons);
+      // tour(p, pop_size, p_index, 1, n_sons);
       setRoulette(p, pop_size, roulette);
       spinRoulette(roulette, pop_size, p_index, n_sons);
       crossOverAll(p, p_index, sons, n_sons, mutate_percent);

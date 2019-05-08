@@ -4,8 +4,7 @@ import random
 from deap import base
 from deap import creator
 from deap import tools
-# from scoop import futures
-import multiprocessing
+
 
 def evaluateSend(i):
     result = (i[4] * 10000 + i[5] * 1000 + i[2] * 100 + i[1] * 10 + i[7]) \
@@ -63,13 +62,6 @@ def main():
     toolbox.register("select", tools.selRoulette, fit_attr='invfitness')
     # toolbox.register("select", tools.selTournament, tournsize=3, fit_attr='invfitness')
     #toolbox.register("select", tools.selBest)
-
-
-
-    # toolbox.register("map", futures.map)
-    #pool = multiprocessing.Pool()
-    #toolbox.register("map", pool.map)
-
 
     pop_size = 200;
     cros_over = 0.8;
