@@ -73,7 +73,7 @@ def main():
     # toolbox.register("select", tools.selTournament, tournsize=3)
     #toolbox.register("select", tools.selBest)
 
-    pop_size = 50;
+    pop_size = 100;
     cros_over = 0.8;
     n_sons = int(pop_size*cros_over);
     n_ger = 300;

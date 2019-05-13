@@ -65,16 +65,16 @@ def main():
 
     toolbox.register("evaluate", evalSameDiagonal)
     toolbox.register("mate", tools.cxOrdered)
-    toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.10)
+    toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.50)
     # toolbox.register("select", tools.selRoulette, fit_attr='invfitness')
     toolbox.register("select", tools.selTournament, tournsize=3)
     #toolbox.register("select", tools.selBest)
 
-    pop_size = 20;
+    pop_size = 200;
     cros_over = 0.8;
     n_sons = int(pop_size*cros_over);
-    n_ger = 200;
-    mutation_rate = 0.2;
+    n_ger = 500;
+    mutation_rate = 1;
 
     pop = toolbox.population(n=pop_size)
 

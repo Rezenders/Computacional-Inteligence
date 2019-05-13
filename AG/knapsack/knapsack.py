@@ -48,10 +48,10 @@ def main():
     toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
     toolbox.register("select", tools.selTournament, tournsize=3)
 
-    pop_size = 100;
+    pop_size = 20;
     cros_over = 0.8;
     n_sons = int(pop_size*cros_over);
-    n_ger = 200;
+    n_ger = 50;
     mutation_rate = 0.2;
 
     pop = toolbox.population(n=pop_size)
