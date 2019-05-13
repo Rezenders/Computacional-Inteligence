@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 struct Node {
   int id;
@@ -38,8 +39,9 @@ int main(int argc, char *argv[]) {
   printf("Arquivo a ser lido: %s\n", file_path);
 
   FILE *fp = fopen(file_path, "r");
-  if (fp == NULL)
+  if (fp == NULL) {
     fputs("Failed to open file!\n", stderr);
+  }
 
   char dist_type;
   int n_nodes;
@@ -87,12 +89,16 @@ int main(int argc, char *argv[]) {
     printf(
         "Primeiro caracter do arquivo de nós está errado. Deve ser c ou d\n");
   }
-  double evap =0.5;
+
+  //Parametros do algoritmo ACO
+  double evap = 0.5;
   int alpha = 1, beta = 2;
   int n_ants = n_nodes;
   struct Ants ants[n_ants];
-  int n_exec = 50;
+  int n_exec = 1;
   int best_dist = 99999999;
+
+  //Inicio da execução do algoritmo
   while (n_exec > 0) {
     int n_ger = 50;
     for (size_t i = 0; i < n_ants; i++) {
@@ -152,6 +158,8 @@ int main(int argc, char *argv[]) {
             // printf("%f\n", ants[a].current_node.prob[n2]);
           }
 
+          int seed = time(NULL);
+          srand(seed);
           double chance = (rand() % 1001) / 1000.0;
           for (size_t n3 = 0; n3 < n_nodes; n3++) {
             if ((ants[a].explored_nodes[n3] != 1) &&
@@ -171,6 +179,7 @@ int main(int argc, char *argv[]) {
         ants[a].path_dist += ants[a].current_node.d[ants[a].initial_node.id];
       }
 
+      //Evaporação
       for (size_t n = 0; n < n_nodes; n++) {
         // printf("f ");
         for (size_t n2 = 0; n2 < n_nodes; n2++) {
@@ -180,7 +189,7 @@ int main(int argc, char *argv[]) {
         // printf("\n");
       }
 
-      // NAO TESTADO
+      //Soma de feromônio
       for (size_t a = 0; a < n_ants; a++) {
         for (size_t n = 0; n < n_nodes; n++) {
           nodes[ants[a].node_order[n].id].f[ants[a].node_order[n + 1].id] +=
@@ -203,9 +212,6 @@ int main(int argc, char *argv[]) {
     }
 
     // printf("Ant 4 initial_node %d \n", ants[4].initial_node.id);
-    // for (size_t i = 0; i < n_nodes; i++) {
-    //   printf("ants explored_nodes %d\n", ants[1].explored_nodes[i]);
-    // }
     // for (size_t i = 0; i < n_nodes+1; i++) {
     //   printf("Node order %d\n", ants[4].node_order[i].id);
     // }
@@ -220,9 +226,6 @@ int main(int argc, char *argv[]) {
     // printf("exec:%d\n",n_exec);
   }
   printf("Best dist %d \n", best_dist);
-  // free(file_path);
-  // free(teste);
-  // free(nodes->d);
   for (size_t i = 0; i < n_nodes; i++) {
     free(nodes[i].d);
   }
