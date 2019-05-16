@@ -71,15 +71,15 @@ def main():
         return dist
 
     Q = 1
-    rho = 0.5
+    rho = 0.8
     alfa = 1
-    beta = 2
-    n_iter_max = 100
+    beta = 4
+    n_iter_max = 50
     best_ant = Ant(None, alfa, beta)
     best_ant.path_dist = 99999999
 
     n_exec = 0
-    n_exec_max = 5
+    n_exec_max = 1
 
     problem = tsplib95.load_problem('st70.tsp', special=euclidean_float)
     while(n_exec < n_exec_max):
@@ -102,7 +102,7 @@ def main():
 
             for a in ants_list:
                 for e in a.edges:
-                    graph[e[0]][e[1]]['feromonio'] += 1/a.path_dist
+                    graph[e[0]][e[1]]['feromonio'] += Q/a.path_dist
 
             best_ant_aux = sorted(ants_list, key=lambda a: a.path_dist)[0]
             if(best_ant_aux.path_dist < best_ant.path_dist):
