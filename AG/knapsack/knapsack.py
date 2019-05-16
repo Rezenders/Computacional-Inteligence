@@ -6,9 +6,9 @@ from deap import creator
 from deap import tools
 
 class Item():
-    def __init__(self, n):
-        self.weight = random.randint(0,n)
-        self.value = random.randint(0,n)
+    def __init__(self, w, v):
+        self.weight = w
+        self.value = v
 
     def __str__(self):
         return "(v: %i, w: %i)"%(self.value,self.weight)
@@ -16,9 +16,17 @@ class Item():
     def __repr__(self):
         return "(v: %i, w: %i)"%(self.value,self.weight)
 
-N_ITEMS = 40
-MAX_WEIGHT = 5*N_ITEMS
-items = [Item(N_ITEMS) for x in range(N_ITEMS)]
+# N_ITEMS = 40
+# MAX_WEIGHT = 5*N_ITEMS
+# items = [Item(random.randint(0,N_ITEMS), random.randint(0,N_ITEMS)) for x in range(N_ITEMS)]
+
+weight = [92, 4,43,83,84,68,92,82,6,44,32,18,56,83, 25,96,70,48,14,58]
+value = [44,46,90,72,91, 40,75,35,8,54, 78, 40,77,15,61,17,75,29,75,63]
+
+N_ITEMS = len(weight)
+MAX_WEIGHT=878
+
+items = [Item(weight[x], value[x]) for x in range(N_ITEMS)]
 
 def evalKnapsack(individual):
     fitness = sum([ind*item.value for ind,item in zip(individual, items)])

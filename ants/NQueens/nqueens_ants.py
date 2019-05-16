@@ -52,26 +52,19 @@ class Ant:
         edges_data = [(n, graph.get_edge_data(self.current_node, n))
                       for n in neighbors if n not in self.explored]
 
-        sum_p = 0
+        aux = []
         for e in edges_data:
             delta = (self.calc_f(self.explored +
                                  [e[0]]) - self.calc_f(self.explored))
             if delta == 0:
                 delta = 0.1
 
-            sum_p += (e[1]["feromonio"]**self.alfa) * ((1 / delta)**self.beta)
+            aux.append((e[1]["feromonio"]**self.alfa) * ((1 / delta)**self.beta))
+        sum_p = sum(aux)
 
         probability = []
-        for e in edges_data:
-            delta = (self.calc_f(self.explored +
-                                 [e[0]]) - self.calc_f(self.explored))
-            if delta == 0:
-                delta = 0.1
-
-            probability.append((e[1]["feromonio"]**self.alfa)
-                               * ((1 / delta)**self.beta) / sum_p)
-        # sum_p = sum([(e[1]["feromonio"]**self.alfa)*((1/(self.calc_f(self.explored + [e[0]]) - self.calc_f(self.explored)))**self.beta) for e in edges_data])
-        # probability = [((e[1]["feromonio"]**self.alfa)*((1/(self.calc_f(self.explored + [e[0]]) - self.calc_f(self.explored)))**self.beta))/sum_p for e in edges_data]
+        for a in aux:
+            probability.append(a/sum_p)
 
         roulette = [probability[0]]
         for p in range(1, len(probability)):

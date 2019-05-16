@@ -62,9 +62,7 @@ class Ant:
             self.path_dist = self.calc_f(graph, self.explored)
             self.path_weight = self.calc_weight(graph, self.explored)
             self.path_value = self.calc_value(graph, self.explored)
-            print("path dist ", self.path_dist, "path_weight ", self.path_weight)
         else:
-            print("terminou")
             end_condition = True
 
         return end_condition
@@ -86,7 +84,7 @@ def main():
     rho = 0.8
     alfa = 1
     beta = 4
-    n_iter_max = 1
+    n_iter_max = 20
 
     best_ant = Ant(None, alfa, beta)
     best_ant.path_dist = 0
